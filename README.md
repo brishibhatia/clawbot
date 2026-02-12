@@ -277,7 +277,7 @@ entry fun record_cleanup_run(
 
 > **Walrus security model:** The client uploads data to Walrus storage nodes, which gather a quorum of signed acknowledgements to form a write certificate. This certificate can be published on Sui as an onchain Proof of Availability (PoA). Our `prove` command stores the Walrus blob ID; a future enhancement can also store the PoA certificate reference.
 
-> When calling `record_cleanup_run`, the transaction must pass the shared `Clock` object at address `0x6` by immutable reference for trusted on-chain timestamps.
+> When calling `record_cleanup_run`, the contract uses `sui::clock::timestamp_ms(clock: &Clock)`; the `Clock` object is the singleton shared object at `0x6`. you must pass it by immutable reference.
 
 Publish with:
 ```bash
@@ -295,7 +295,17 @@ Walrus relays can require a tip; the relay advertises its policy at `/v1/tip-con
 curl https://upload-relay.testnet.walrus.space/v1/tip-config
 ```
 
-The `prove` command does this automatically and logs whether a tip is required. See [Walrus relay docs](https://docs.wal.app/operator-guide/upload-relay.html) for details.
+Public relays:
+- Testnet: `https://upload-relay.testnet.walrus.space`
+- Mainnet: `https://upload-relay.mainnet.walrus.space`
+
+The `prove` command handles this automatically (including tip payment if configured) and prints copy-paste friendly IDs:
+
+```
+walrus_blob_id=...
+sui_object_id=...
+tx_digest=...
+```
 
 ---
 

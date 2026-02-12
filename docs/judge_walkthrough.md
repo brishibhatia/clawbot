@@ -161,7 +161,11 @@ If the upload fails, check tip configuration:
 ```bash
 curl https://upload-relay.testnet.walrus.space/v1/tip-config
 ```
-The `prove` command checks this automatically. See [relay docs](https://docs.wal.app/operator-guide/upload-relay.html).
+The `prove` command checks this automatically. Public relays:
+- Testnet: `https://upload-relay.testnet.walrus.space`
+- Mainnet: `https://upload-relay.mainnet.walrus.space`
+
+See [relay docs](https://docs.wal.app/operator-guide/upload-relay.html).
 
 ---
 
