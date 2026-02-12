@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.deepclean-quarantine/
+.deepclean-staging/
+.deepclean-proofs/
+*.zip
+.env
+.env.local
+coverage/
+.deepclean-demo/
+*.tar.gz
+*.tgz
+sui.keystore
+client.yaml
+bytecode.json
+*.log
+bin/

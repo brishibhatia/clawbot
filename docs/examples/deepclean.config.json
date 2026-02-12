@@ -1,0 +1,20 @@
+{
+    "roots": [
+        "~/Downloads",
+        "~/Desktop",
+        ".deepclean-demo"
+    ],
+    "quarantineDir": ".deepclean-quarantine",
+    "stagingDir": ".deepclean-staging",
+    "proofsDir": ".deepclean-proofs",
+    "schedule": "*/30 * * * *",
+    "maxCpuPercent": 50,
+    "allowedActions": [
+        "classify",
+        "dedupe",
+        "rename",
+        "quarantine",
+        "unzip"
+    ],
+    "dryRunByDefault": true
+}

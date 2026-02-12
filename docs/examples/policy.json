@@ -1,0 +1,20 @@
+{
+    "version": "1.0.0",
+    "rules": {
+        "neverDelete": true,
+        "maxFileSizeMB": 500,
+        "quarantineDoubleExtensions": true,
+        "quarantineLargeExecutablesMB": 50,
+        "dedupeByContentHash": true,
+        "renameWithDatePrefix": true,
+        "autoUnzipArchives": true,
+        "skipOnBattery": false,
+        "skipPatterns": [
+            "node_modules",
+            ".git",
+            ".deepclean-",
+            "__pycache__",
+            ".venv"
+        ]
+    }
+}

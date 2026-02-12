@@ -1,0 +1,24 @@
+{
+  "name": "verifiable-deepclean-butler",
+  "version": "0.1.0",
+  "private": true,
+  "description": "An always-on local agent that proactively cleans/organizes a workspace with tamper-evident Sui/Walrus proof bundles",
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "seed": "node scripts/seed_workspace.mjs",
+    "plan": "node apps/deepclean-cli/dist/index.js plan --path .deepclean-demo",
+    "demo": "node scripts/demo.mjs",
+    "clean": "pnpm -r exec rm -rf dist"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "devDependencies": {
+    "@types/adm-zip": "^0.5.7",
+    "@types/tar": "^6.1.13",
+    "adm-zip": "^0.5.16",
+    "tar": "^7.5.7"
+  }
+}
