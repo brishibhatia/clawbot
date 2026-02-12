@@ -7,6 +7,7 @@ export const verifyCommand = new Command('verify')
     .action(async (opts) => {
         console.log('🔍 Verifying CleanupRun...');
         console.log(`   Sui Object: ${opts.object}`);
+        console.log('   (No local secrets required — using public SUI_RPC_URL and WALRUS_AGGREGATOR_URL)');
         console.log('');
 
         try {
@@ -18,6 +19,9 @@ export const verifyCommand = new Command('verify')
             console.log(`   Expected SHA256: ${result.expectedSha256}`);
             console.log(`   Actual SHA256:   ${result.actualSha256}`);
             console.log(`   Hash Match:      ${result.hashMatch ? '✅ YES' : '❌ NO'}`);
+            if (result.planHash) {
+                console.log(`   Plan Hash:       ${result.planHash}`);
+            }
             console.log('');
             console.log(`   ${result.details}`);
         } catch (err) {

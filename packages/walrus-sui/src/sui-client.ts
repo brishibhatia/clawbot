@@ -36,6 +36,7 @@ export async function anchorOnSui(params: {
     bundleSha256: string;
     summary: string;
     policyHash: string;
+    planHash: string;
 }): Promise<AnchorResult> {
     const network = (process.env.SUI_NETWORK as 'testnet' | 'mainnet') || 'testnet';
     const rpcUrl = process.env.SUI_RPC_URL || getFullnodeUrl(network);
@@ -57,6 +58,7 @@ export async function anchorOnSui(params: {
             tx.pure.string(params.bundleSha256),
             tx.pure.string(params.summary),
             tx.pure.string(params.policyHash),
+            tx.pure.string(params.planHash),
             tx.object(SUI_CLOCK_OBJECT_ID),
         ],
     });

@@ -138,11 +138,17 @@ export function generatePlan(
 
     const summary = `Plan: ${actions.length} actions across ${files.length} files in ${rootPath}`;
 
+    // Deterministic plan hash: sha256 of canonical JSON (sorted keys) of actions
+    // We only hash the actions array to detect duplicate *intent*
+    const canonicalPlan = JSON.stringify(actions, Object.keys(actions).sort());
+    const planHash = crypto.createHash('sha256').update(canonicalPlan).digest('hex');
+
     return {
         runId,
         timestamp: new Date().toISOString(),
         policyVersion: policy.version,
         policyHash,
+        planHash,
         rootPath: path.resolve(rootPath),
         dryRun,
         actions,

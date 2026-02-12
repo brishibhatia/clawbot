@@ -61,6 +61,7 @@ export const proveCommand = new Command('prove')
             bundleSha256: manifest.bundleSha256,
             summary: manifest.summary,
             policyHash: manifest.policyHash,
+            planHash: manifest.planHash,
         });
 
         console.log(`\n✅ Anchored on Sui`);

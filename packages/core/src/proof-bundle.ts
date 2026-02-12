@@ -24,6 +24,7 @@ export function buildManifest(
         endTimestamp: new Date().toISOString(),
         policyVersion: plan.policyVersion,
         policyHash: plan.policyHash,
+        planHash: plan.planHash,
         environment: {
             os: `${process.platform}-${process.arch}`,
             nodeVersion: process.version,
@@ -69,6 +70,16 @@ export async function createProofBundle(
         path.join(bundleDir, 'file-tree-after.txt'),
         manifest.fileTreeAfter.join('\n')
     );
+
+    // Write explainable diffs (human-readable)
+    const diffText = manifest.executedActions
+        .map(a => `[${a.type.toUpperCase()}] ${a.sourcePath} -> ${a.success ? (a.targetPath || 'DONE') : 'FAILED: ' + a.reason}`)
+        .join('\n');
+    fs.writeFileSync(path.join(bundleDir, 'tree_diff.txt'), diffText);
+
+    // Write NDJSON actions log (machine-readable streaming)
+    const ndjson = manifest.executedActions.map(a => JSON.stringify(a)).join('\n');
+    fs.writeFileSync(path.join(bundleDir, 'actions.jsonl'), ndjson);
 
     // Create zip
     const zipPath = path.join(config.proofsDir, `${bundleName}.zip`);

@@ -45,6 +45,7 @@ export interface ActionPlan {
     dryRun: boolean;
     actions: PlannedAction[];
     fileCount: number;
+    planHash: string;
     summary: string;
 }
 
@@ -54,6 +55,7 @@ export interface ProofManifest {
     endTimestamp: string;
     policyVersion: string;
     policyHash: string;
+    planHash: string;
     environment: {
         os: string;
         nodeVersion: string;

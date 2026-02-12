@@ -20,6 +20,7 @@ module cleanup_run::cleanup_run {
         summary: String,
         timestamp_ms: u64,       // Unix timestamp in milliseconds (from sui::clock::Clock)
         policy_hash: String,
+        plan_hash: String,
         owner: address,
     }
 
@@ -29,6 +30,7 @@ module cleanup_run::cleanup_run {
         walrus_blob_id: String,
         bundle_sha256: String,
         timestamp_ms: u64,
+        plan_hash: String,
     }
 
     // ── Entry function — callable from a PTB ────────────────────
@@ -38,6 +40,7 @@ module cleanup_run::cleanup_run {
         bundle_sha256: String,
         summary: String,
         policy_hash: String,
+        plan_hash: String,
         clock: &Clock,
         ctx: &mut TxContext,
     ) {
@@ -51,6 +54,7 @@ module cleanup_run::cleanup_run {
             summary,
             timestamp_ms: ts,
             policy_hash,
+            plan_hash,
             owner: ctx.sender(),
         };
 
@@ -59,6 +63,7 @@ module cleanup_run::cleanup_run {
             walrus_blob_id: record.walrus_blob_id,
             bundle_sha256: record.bundle_sha256,
             timestamp_ms: ts,
+            plan_hash: record.plan_hash,
         });
 
         transfer::transfer(record, ctx.sender());
@@ -71,4 +76,5 @@ module cleanup_run::cleanup_run {
     public fun summary(self: &CleanupRun): &String { &self.summary }
     public fun timestamp_ms(self: &CleanupRun): u64 { self.timestamp_ms }
     public fun policy_hash(self: &CleanupRun): &String { &self.policy_hash }
+    public fun plan_hash(self: &CleanupRun): &String { &self.plan_hash }
 }

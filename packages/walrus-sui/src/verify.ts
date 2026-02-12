@@ -13,6 +13,8 @@ export interface VerificationResult {
     expectedSha256: string;
     actualSha256: string;
     hashMatch: boolean;
+    policyHash: string;
+    planHash?: string;
     details: string;
 }
 
@@ -27,33 +29,35 @@ export async function verifyCleanupRun(suiObjectId: string): Promise<Verificatio
     logger.info({ suiObjectId }, 'Starting verification');
 
     // 1. Fetch on-chain record
-    const fields = await fetchCleanupRun(suiObjectId);
-    const runId = fields.run_id ?? '';
-    const walrusBlobId = fields.walrus_blob_id ?? '';
-    const expectedSha256 = fields.bundle_sha256 ?? '';
+    const record = await fetchCleanupRun(suiObjectId);
+    const runId = record.run_id ?? '';
+    const walrusBlobId = record.walrus_blob_id ?? '';
+    const onChainSha256 = record.bundle_sha256 ?? '';
 
-    logger.info({ runId, walrusBlobId, expectedSha256 }, 'Fetched on-chain record');
+    logger.info({ runId, walrusBlobId, onChainSha256 }, 'Fetched on-chain record');
 
     // 2. Download from Walrus
     const blobData = await downloadFromWalrus(walrusBlobId);
     logger.info({ size: blobData.length }, 'Downloaded blob from Walrus');
 
     // 3. Recompute hash
-    const actualSha256 = crypto.createHash('sha256').update(blobData).digest('hex');
-    logger.info({ actualSha256 }, 'Computed hash of downloaded blob');
+    const computedSha256 = crypto.createHash('sha256').update(blobData).digest('hex');
+    logger.info({ computedSha256 }, 'Computed hash of downloaded blob');
 
     // 4. Compare
-    const hashMatch = actualSha256 === expectedSha256;
+    const hashMatch = computedSha256 === onChainSha256;
 
     const result: VerificationResult = {
         valid: hashMatch,
         runId,
         suiObjectId,
         walrusBlobId,
-        expectedSha256,
-        actualSha256,
-        hashMatch,
-        details: hashMatch
+        expectedSha256: onChainSha256,
+        actualSha256: computedSha256,
+        hashMatch: computedSha256 === onChainSha256,
+        policyHash: record.policy_hash,
+        planHash: record.plan_hash,
+        details: computedSha256 === onChainSha256
             ? '✅ Bundle hash matches on-chain record. Proof is valid.'
             : '❌ Hash mismatch! Bundle may have been tampered with.',
     };
