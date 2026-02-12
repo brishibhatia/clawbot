@@ -68,5 +68,12 @@ export const proveCommand = new Command('prove')
         console.log(`   Object ID:  ${suiResult.objectId}`);
         console.log(`   Explorer:   https://suiscan.xyz/testnet/tx/${suiResult.txDigest}`);
 
-        console.log(`\nNext: deepclean-cli verify --object ${suiResult.objectId}`);
+        // Copy-paste-friendly summary for judges / scripts
+        console.log(`\n─── Copy-Paste IDs ─────────────────────────`);
+        console.log(`walrus_blob_id=${walrusResult.blobId}`);
+        console.log(`sui_object_id=${suiResult.objectId}`);
+        console.log(`tx_digest=${suiResult.txDigest}`);
+        console.log(`─────────────────────────────────────────────`);
+
+        console.log(`\nVerify: node apps/deepclean-cli/dist/index.js verify --object ${suiResult.objectId}`);
     });

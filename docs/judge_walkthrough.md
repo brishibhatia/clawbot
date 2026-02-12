@@ -130,7 +130,16 @@ RUN_ID=$(jq -r .runId .deepclean-proofs/*-manifest.json | head -1)
 node apps/deepclean-cli/dist/index.js prove --run "$RUN_ID"
 ```
 
-✅ Expected: Walrus blob ID + Sui object ID + tx digest printed. The on-chain `CleanupRun` object contains a `timestamp_ms` derived from `sui::clock::Clock` (not client-provided).
+✅ Expected: Copy-paste-friendly output block:
+```
+─── Copy-Paste IDs ─────────────────────────
+walrus_blob_id=<blob_id>
+sui_object_id=<object_id>
+tx_digest=<digest>
+─────────────────────────────────────────────
+```
+
+> The SDK automatically passes the shared `Clock` object (`0x6`) for trusted on-chain timestamps.
 
 ### 6c. Verify
 
@@ -145,6 +154,14 @@ node apps/deepclean-cli/dist/index.js verify --object <sui_object_id>
 Visit: `https://suiscan.xyz/testnet/object/<object_id>`
 
 ✅ Expected: `CleanupRun` object with fields: `run_id`, `walrus_blob_id`, `bundle_sha256`, `summary`, `timestamp_ms` (on-chain), `policy_hash`.
+
+### 6e. Walrus Relay Troubleshooting
+
+If the upload fails, check tip configuration:
+```bash
+curl https://upload-relay.testnet.walrus.space/v1/tip-config
+```
+The `prove` command checks this automatically. See [relay docs](https://docs.wal.app/operator-guide/upload-relay.html).
 
 ---
 

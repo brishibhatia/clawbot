@@ -277,11 +277,25 @@ entry fun record_cleanup_run(
 
 > **Walrus security model:** The client uploads data to Walrus storage nodes, which gather a quorum of signed acknowledgements to form a write certificate. This certificate can be published on Sui as an onchain Proof of Availability (PoA). Our `prove` command stores the Walrus blob ID; a future enhancement can also store the PoA certificate reference.
 
+> When calling `record_cleanup_run`, the SDK automatically passes the shared `Clock` object at address `0x6` for trusted on-chain timestamps.
+
 Publish with:
 ```bash
 cd move/cleanup_run
 sui client publish --gas-budget 100000000
 ```
+
+---
+
+## Walrus Relay Troubleshooting
+
+If uploads fail, check the relay's tip configuration:
+
+```bash
+curl https://upload-relay.testnet.walrus.space/v1/tip-config
+```
+
+The `prove` command does this automatically and logs whether a tip is required. See [Walrus relay docs](https://docs.wal.app/operator-guide/upload-relay.html) for details.
 
 ---
 
