@@ -139,7 +139,7 @@ tx_digest=<digest>
 ─────────────────────────────────────────────
 ```
 
-> The SDK automatically passes the shared `Clock` object (`0x6`) for trusted on-chain timestamps.
+> The transaction passes the shared `Clock` object (`0x6`) by immutable reference for trusted on-chain timestamps.
 
 ### 6c. Verify
 
