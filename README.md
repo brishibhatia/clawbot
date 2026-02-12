@@ -119,29 +119,99 @@ node apps/deepclean-daemon/dist/index.js
 
 ---
 
-## Repository Layout
+## Repository Structure
 
 ```
 clawbot/
 ├── apps/
-│   ├── deepclean-cli/        # CLI app (plan, run, prove, verify, status, restore)
-│   └── deepclean-daemon/     # Always-on daemon (watcher + scheduler)
+│   ├── deepclean-cli/                  # CLI application
+│   │   ├── src/
+│   │   │   ├── index.ts                #   Entry point (Commander setup)
+│   │   │   └── commands/
+│   │   │       ├── plan.ts             #   Dry-run scan
+│   │   │       ├── run.ts              #   Execute cleanup + proof bundle
+│   │   │       ├── prove.ts            #   Upload to Walrus + anchor on Sui
+│   │   │       ├── verify.ts           #   Download + re-hash + check Sui
+│   │   │       ├── status.ts           #   List recent runs
+│   │   │       └── restore.ts          #   Restore quarantined files
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   └── deepclean-daemon/               # Always-on daemon
+│       ├── src/
+│       │   ├── index.ts                #   Entry point
+│       │   ├── watcher.ts              #   Chokidar file watcher
+│       │   └── scheduler.ts            #   Cron-like periodic runs
+│       ├── package.json
+│       └── tsconfig.json
+│
 ├── packages/
-│   ├── core/                 # Policy engine, classifier, planner, executor, proof bundle
-│   ├── walrus-sui/           # Walrus upload + Sui anchoring + verification
-│   └── openclaw-skill/       # OpenClaw skill (SKILL.md + /deepclean command)
+│   ├── core/                           # Core engine library
+│   │   ├── src/
+│   │   │   ├── index.ts                #   Barrel exports
+│   │   │   ├── types.ts                #   Shared types & interfaces
+│   │   │   ├── classifier.ts           #   File classification by extension
+│   │   │   ├── policy-engine.ts        #   Rule evaluation from policy.json
+│   │   │   ├── planner.ts              #   Directory scan → ActionPlan
+│   │   │   ├── executor.ts             #   Non-destructive action execution
+│   │   │   ├── proof-bundle.ts         #   Manifest + ZIP + SHA-256
+│   │   │   ├── repo-hygiene.ts         #   Git repo detection & checks
+│   │   │   └── seal.ts                 #   Seal encryption stub (AES-256-GCM)
+│   │   ├── tests/
+│   │   │   ├── classifier.test.ts
+│   │   │   ├── policy-engine.test.ts
+│   │   │   └── proof-bundle.test.ts
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   ├── walrus-sui/                     # Walrus + Sui integration
+│   │   ├── src/
+│   │   │   ├── index.ts                #   Barrel exports
+│   │   │   ├── walrus-client.ts        #   HTTP upload to Walrus relay
+│   │   │   ├── sui-client.ts           #   Sui PTB for CleanupRun anchoring
+│   │   │   └── verify.ts              #   Download blob + re-hash + check Sui
+│   │   ├── scripts/
+│   │   │   └── publish.mjs             #   SDK-based contract publish script
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   └── openclaw-skill/                 # OpenClaw integration
+│       ├── SKILL.md                    #   Skill metadata (YAML frontmatter)
+│       └── deepclean.md                #   /deepclean slash command workflow
+│
 ├── move/
-│   └── cleanup_run/          # Sui Move package for CleanupRun object
+│   └── cleanup_run/                    # Sui Move smart contract
+│       ├── sources/
+│       │   └── cleanup_run.move        #   CleanupRun struct + entry function
+│       ├── scripts/
+│       │   └── publish.sh              #   CLI publish helper
+│       └── Move.toml                   #   Move package manifest
+│
 ├── scripts/
-│   ├── demo.mjs              # End-to-end demo script
-│   └── seed_workspace.mjs    # Creates a messy demo workspace
+│   ├── demo.mjs                        # End-to-end demo script
+│   ├── demo.sh                         # Shell wrapper
+│   ├── seed_workspace.mjs              # Creates messy demo workspace
+│   ├── seed_workspace.sh               # Shell wrapper
+│   ├── install_sui.ps1                 # Sui CLI installer (Windows)
+│   ├── publish-sdk.mjs                 # Alternate publish via SDK
+│   └── publish-sdk.ts                  # TypeScript publish script
+│
 ├── docs/
-│   ├── threat_model.md       # Agent risks + mitigations
-│   ├── judge_walkthrough.md  # Step-by-step verification for judges
-│   └── examples/             # Sample configs
-├── deepclean.config.json     # Default configuration
-├── policy.json               # Default cleanup policy
-└── README.md                 # This file
+│   ├── threat_model.md                 # Agent risks + mitigations
+│   ├── judge_walkthrough.md            # Step-by-step verification for judges
+│   └── examples/
+│       ├── deepclean.config.json       # Example configuration
+│       └── policy.json                 # Example policy
+│
+├── .env                                # Environment variables (git-ignored)
+├── .gitignore
+├── deepclean.config.json               # Default configuration
+├── policy.json                         # Default cleanup policy
+├── package.json                        # Root workspace package
+├── pnpm-workspace.yaml                 # pnpm workspace declaration
+├── pnpm-lock.yaml
+├── tsconfig.base.json                  # Shared TypeScript config
+└── README.md
 ```
 
 ---
