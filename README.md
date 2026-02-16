@@ -78,7 +78,7 @@ node apps/deepclean-cli/dist/index.js run --path .deepclean-demo
 node apps/deepclean-cli/dist/index.js prove --run <runId>
 
 # Verify (public, no secrets) — downloads from Walrus aggregator and recomputes SHA-256 locally
-# Endpoint: GET $AGGREGATOR/v1/blobs/<blobId>
+# Walrus blobs can be fetched from an aggregator via `GET $AGGREGATOR/v1/blobs/<blobId>`.
 node apps/deepclean-cli/dist/index.js verify --object <suiObjectId>
 
 # List recent runs
@@ -303,6 +303,8 @@ Walrus relays can require a tip; the relay advertises its policy at `/v1/tip-con
 ```bash
 curl https://upload-relay.testnet.walrus.space/v1/tip-config
 ```
+
+If the relay requires a tip, uploads include `blob_id` plus `tx_id` and `nonce` query parameters when calling `/v1/blob-upload-relay` (the relay checks tip tx freshness).
 
 Public relays:
 - Testnet: `https://upload-relay.testnet.walrus.space`
