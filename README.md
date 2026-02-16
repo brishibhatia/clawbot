@@ -69,7 +69,7 @@ node apps/deepclean-cli/dist/index.js run --path .deepclean-demo
 # Upload to Walrus + anchor on Sui
 node apps/deepclean-cli/dist/index.js prove --run <runId>
 
-# Verify a run (download + re-hash + check Sui)
+# Verify (public, no secrets) — downloads from Walrus & recomputes SHA-256 locally
 node apps/deepclean-cli/dist/index.js verify --object <suiObjectId>
 
 # List recent runs
@@ -225,7 +225,7 @@ clawbot/
 | `SUI_PRIVATE_KEY` | For prove | — | Base64 or `suiprivkey` format (**use burner key!**) |
 | `DEEPCLEAN_PACKAGE_ID` | For prove | — | Published Move package ID |
 | `WALRUS_UPLOAD_RELAY` | No | `https://upload-relay.testnet.walrus.space` | Walrus upload relay |
-| `WALRUS_AGGREGATOR_URL` | No | `https://aggregator.testnet.walrus.space` | Walrus aggregator |
+| `WALRUS_AGGREGATOR_URL` | No | `https://aggregator.walrus-testnet.walrus.space` | Walrus aggregator |
 
 > ⚠️ **SUI_PRIVATE_KEY**: Use a burner testnet key only. Never use a mainnet key with real funds.
 

@@ -14,11 +14,12 @@
         "@deepclean/core": "workspace:*",
         "@deepclean/walrus-sui": "workspace:*",
         "commander": "^13.1.0",
+        "dotenv": "^17.3.1",
         "pino": "^9.6.0",
         "pino-pretty": "^13.0.0"
     },
     "devDependencies": {
-        "typescript": "^5.7.0",
-        "@types/node": "^22.0.0"
+        "@types/node": "^22.0.0",
+        "typescript": "^5.7.0"
     }
 }

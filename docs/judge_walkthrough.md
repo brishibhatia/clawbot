@@ -130,12 +130,12 @@ RUN_ID=$(jq -r .runId .deepclean-proofs/*-manifest.json | head -1)
 node apps/deepclean-cli/dist/index.js prove --run "$RUN_ID"
 ```
 
-✅ Expected: Copy-paste-friendly output block:
+✅ Expected: Copy-paste-friendly output block. Example from verified run:
 ```
 ─── Copy-Paste IDs ─────────────────────────
-walrus_blob_id=<blob_id>
-sui_object_id=<object_id>
-tx_digest=<digest>
+walrus_blob_id=G9vfRZ4mJDVtaaIbCCc7a2PcjGBPPxdyV4zL3sPiNQg
+sui_object_id=0x0f5ef242a7dd0050ecce191bf9304798bff74daf3edd2ec66f518653d88957f5
+tx_digest=HBGxhPNUeGjuCyKkhAfidTf4B19RGbzZVB1uLPGigCxk
 ─────────────────────────────────────────────
 ```
 

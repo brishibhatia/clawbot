@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import 'dotenv/config';
 import { Command } from 'commander';
 import { planCommand } from './commands/plan.js';
 import { runCommand } from './commands/run.js';

@@ -58,7 +58,7 @@ export async function anchorOnSui(params: {
             tx.pure.string(params.bundleSha256),
             tx.pure.string(params.summary),
             tx.pure.string(params.policyHash),
-            tx.pure.string(params.planHash),
+            // tx.pure.string(params.planHash), // Disabled: contract stale, waiting for recompile
             tx.object(SUI_CLOCK_OBJECT_ID),
         ],
     });

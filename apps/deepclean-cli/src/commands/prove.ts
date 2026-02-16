@@ -68,6 +68,7 @@ export const proveCommand = new Command('prove')
         console.log(`   TX Digest:  ${suiResult.txDigest}`);
         console.log(`   Object ID:  ${suiResult.objectId}`);
         console.log(`   Explorer:   https://suiscan.xyz/testnet/tx/${suiResult.txDigest}`);
+        console.log(`   Object:     https://suiscan.xyz/testnet/object/${suiResult.objectId}`);
 
         // Copy-paste-friendly summary for judges / scripts
         console.log(`\n─── Copy-Paste IDs ─────────────────────────`);
@@ -77,4 +78,5 @@ export const proveCommand = new Command('prove')
         console.log(`─────────────────────────────────────────────`);
 
         console.log(`\nVerify: node apps/deepclean-cli/dist/index.js verify --object ${suiResult.objectId}`);
+        console.log(`Download: https://aggregator.walrus-testnet.walrus.space/v1/blobs/${walrusResult.blobId}`);
     });
