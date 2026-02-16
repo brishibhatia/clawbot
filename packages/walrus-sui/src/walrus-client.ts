@@ -1,5 +1,11 @@
 import fs from 'node:fs';
+import { createHash, randomBytes } from 'node:crypto';
 import pino from 'pino';
+import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
+import { Transaction } from '@mysten/sui/transactions';
+import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
+import { fromBase64 } from '@mysten/sui/utils';
+import { bcs } from '@mysten/sui/bcs';
 
 const logger = pino({ name: 'deepclean-walrus' });
 
@@ -17,6 +23,26 @@ interface TipConfig {
     tipAmount?: number;
 }
 
+interface TipPaymentResult {
+    txId: string;
+    nonce: string; // Base64url encoded
+}
+
+/**
+ * Restore keypair from env. Expects base64-encoded secret key.
+ */
+function getKeypair(): Ed25519Keypair {
+    const key = process.env.SUI_PRIVATE_KEY;
+    if (!key) {
+        throw new Error('SUI_PRIVATE_KEY env var is required for paid Walrus uploads');
+    }
+    // Support both raw base64 and suiprivkey format
+    if (key.startsWith('suiprivkey')) {
+        return Ed25519Keypair.fromSecretKey(key);
+    }
+    return Ed25519Keypair.fromSecretKey(fromBase64(key));
+}
+
 /**
  * Fetch relay tip configuration from /v1/tip-config.
  * Some relays require a SUI tip to process uploads.
@@ -31,17 +57,85 @@ async function fetchTipConfig(relayHost: string): Promise<TipConfig> {
             return { tipRequired: false };
         }
         const json = await res.json() as Record<string, any>;
-        const tipRequired = Boolean(json.tipAddress && json.tipAmount);
-        logger.info({ tipRequired, tipAddress: json.tipAddress }, 'Relay tip config');
+
+        // Flexible parsing for tip config
+        let tipAddress: string | undefined;
+        let tipAmount: number | undefined;
+
+        if (json.send_tip) {
+            tipAddress = json.send_tip.address;
+            if (typeof json.send_tip.kind === 'object' && json.send_tip.kind.const) {
+                tipAmount = Number(json.send_tip.kind.const);
+            } else if (typeof json.send_tip.amount === 'number') {
+                tipAmount = json.send_tip.amount;
+            }
+        } else if (json.tipAddress && json.tipAmount) {
+            tipAddress = json.tipAddress;
+            tipAmount = Number(json.tipAmount);
+        }
+
+        const tipRequired = Boolean(tipAddress && tipAmount && tipAmount > 0);
+        logger.info({ tipRequired, tipAddress, tipAmount }, 'Relay tip config');
+
         return {
             tipRequired,
-            tipAddress: json.tipAddress,
-            tipAmount: json.tipAmount,
+            tipAddress,
+            tipAmount,
         };
     } catch (err) {
         logger.warn({ err }, 'Failed to fetch tip-config — assuming no tip required');
         return { tipRequired: false };
     }
+}
+
+/**
+ * Pay the relay tip via a Sui PTB.
+ * Input 0 must be bcs(sha256(blob) || sha256(nonce) || blob_len).
+ */
+async function payRelayTip(blob: Buffer, tipAddress: string, tipAmount: number): Promise<TipPaymentResult> {
+    const keypair = getKeypair();
+    const network = (process.env.SUI_NETWORK as 'testnet' | 'mainnet') || 'testnet';
+    const rpcUrl = process.env.SUI_RPC_URL || getFullnodeUrl(network);
+    const client = new SuiClient({ url: rpcUrl });
+
+    // 1. Prepare Auth Message
+    const blobDigest = createHash('sha256').update(blob).digest();
+    const nonceBytes = randomBytes(32);
+    const nonceDigest = createHash('sha256').update(nonceBytes).digest();
+
+    // unencoded_length (u64 little endian)
+    const lenBuffer = Buffer.alloc(8);
+    lenBuffer.writeBigUInt64LE(BigInt(blob.length));
+
+    // Concatenate: blob_digest || nonce_digest || unencoded_length
+    const authMsg = Buffer.concat([blobDigest, nonceDigest, lenBuffer]);
+
+    logger.info({ tipAddress, tipAmount, blobLen: blob.length }, 'Paying relay tip on Sui');
+
+    const tx = new Transaction();
+
+    // Input 0: Auth Message (vector<u8>)
+    // Using purely bcs.vector(bcs.u8()).serialize(...) to ensure correct BCS serialization of the vector
+    tx.pure(bcs.vector(bcs.u8()).serialize(authMsg));
+
+    // Pay tip
+    const [coin] = tx.splitCoins(tx.gas, [tx.pure.u64(tipAmount)]);
+    tx.transferObjects([coin], tx.pure.address(tipAddress));
+
+    const result = await client.signAndExecuteTransaction({
+        signer: keypair,
+        transaction: tx,
+    });
+
+    logger.info({ txDigest: result.digest }, 'Tip paid successfully');
+
+    // Walrus uses unpadded base64url for nonce query param
+    const nonceBase64Url = nonceBytes.toString('base64url').replace(/=/g, '');
+
+    return {
+        txId: result.digest,
+        nonce: nonceBase64Url,
+    };
 }
 
 /**
@@ -53,19 +147,28 @@ export async function uploadToWalrus(zipPath: string): Promise<WalrusUploadResul
     const relayHost = process.env.WALRUS_UPLOAD_RELAY || DEFAULT_UPLOAD_RELAY;
     const aggregatorUrl = process.env.WALRUS_AGGREGATOR_URL || DEFAULT_AGGREGATOR;
 
+    const fileData = fs.readFileSync(zipPath);
+
     // Pre-flight: check tip config
     const tipConfig = await fetchTipConfig(relayHost);
-    if (tipConfig.tipRequired) {
-        logger.info(
-            { tipAddress: tipConfig.tipAddress, tipAmount: tipConfig.tipAmount },
-            'Relay requires a tip — ensure your account has SUI for tip payment'
-        );
+
+    let tipParams = '';
+
+    if (tipConfig.tipRequired && tipConfig.tipAddress && tipConfig.tipAmount) {
+        try {
+            const { txId, nonce } = await payRelayTip(fileData, tipConfig.tipAddress, tipConfig.tipAmount);
+            tipParams = `&tx_id=${txId}&nonce=${nonce}`;
+        } catch (err) {
+            logger.error({ err }, 'Failed to pay relay tip');
+            throw new Error('Failed to pay relay tip. Check SUI_PRIVATE_KEY and balance.');
+        }
     }
 
     logger.info({ zipPath, relayHost }, 'Uploading proof bundle to Walrus');
 
-    const fileData = fs.readFileSync(zipPath);
-    const url = `${relayHost}/v1/blobs`;
+    // For paid uploads, we append tx_id and nonce. 
+    // We stick to v1/blobs as it's the standard entry point, relay should handle redirection/auth.
+    const url = `${relayHost}/v1/blobs?encoding_type=RS2${tipParams}`;
 
     // Upload with 1 retry on server errors
     let lastError: Error | null = null;
@@ -104,7 +207,7 @@ export async function uploadToWalrus(zipPath: string): Promise<WalrusUploadResul
 
             throw new Error(
                 `Walrus upload failed (${response.status}): ${text}\n` +
-                `  Relay: ${relayHost}\n` +
+                `  Relay: ${url}\n` +
                 `  Tip-config: ${JSON.stringify(tipConfig)}`
             );
         } catch (err) {

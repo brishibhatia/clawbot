@@ -304,6 +304,11 @@ Walrus relays can require a tip; the relay advertises its policy at `/v1/tip-con
 curl https://upload-relay.testnet.walrus.space/v1/tip-config
 ```
 
+**DeepClean CLI automatically handles tipping.** If a relay requires a tip, the CLI calculates the auth message, pays the tip on Sui, and attaches the proof to the upload.
+
+If uploads fail, you can manually check the relay's tip configuration:
+
+
 If the relay requires a tip, uploads include `blob_id` plus `tx_id` and `nonce` query parameters when calling `/v1/blob-upload-relay` (the relay checks tip tx freshness).
 
 Public relays:
