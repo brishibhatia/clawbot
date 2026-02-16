@@ -50,7 +50,7 @@ pnpm build
 pnpm demo
 ```
 
-To verifying the run immediately (judges):
+To verify a run immediately (judges), run a demo, then `prove`, then `verify`:
 
 ```bash
 pnpm demo
@@ -77,7 +77,8 @@ node apps/deepclean-cli/dist/index.js run --path .deepclean-demo
 # Upload to Walrus + anchor on Sui
 node apps/deepclean-cli/dist/index.js prove --run <runId>
 
-# Verify (public, no secrets) — downloads from Walrus aggregator (/v1/blobs/<blobId>) & recomputes SHA-256 locally
+# Verify (public, no secrets) — downloads from Walrus aggregator and recomputes SHA-256 locally
+# Endpoint: GET $AGGREGATOR/v1/blobs/<blobId>
 node apps/deepclean-cli/dist/index.js verify --object <suiObjectId>
 
 # List recent runs
@@ -283,7 +284,7 @@ entry fun record_cleanup_run(
 )
 ```
 
-> **Walrus security model:** With an upload relay, the client registers the blob on Sui and POSTs bytes to `/v1/blob-upload-relay`; the relay distributes slivers to storage nodes and returns a confirmation certificate for on-chain certification. Our `prove` command stores the Walrus blob ID; a future enhancement can also store the PoA certificate reference.
+> **Walrus security model:** With an upload relay, the client registers the blob on Sui and POSTs bytes to `/v1/blob-upload-relay`. The relay distributes slivers to storage nodes and returns a confirmation certificate for on-chain certification. Our `prove` command stores the Walrus blob ID; a future enhancement can also store the PoA certificate reference.
 
 > When calling `record_cleanup_run`, the contract uses `sui::clock::timestamp_ms(clock: &Clock)`; the `Clock` object is the singleton shared object at `0x6`. You must pass it by immutable reference.
 
