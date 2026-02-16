@@ -87,3 +87,45 @@ node apps/deepclean-cli/dist/index.js plan --path .deepclean-demo
 
 - `{baseDir}/deepclean.config.json` — roots, quarantine dir, schedule
 - `{baseDir}/policy.json` — cleanup rules (never-delete, max size, etc.)
+## Programmatic Usage
+
+You can import the skill directly in your TypeScript agent:
+
+```typescript
+import { DeepCleanSkill } from '@deepclean/openclaw-skill';
+
+const skill = new DeepCleanSkill({
+    baseDir: '/path/to/workspace',
+    // Optional overrides
+    // quarantineDir: '...',
+    // proofsDir: '...'
+});
+
+// 1. Plan
+const plan = await skill.plan('/path/to/target');
+
+// 2. Run
+const result = await skill.run('/path/to/target');
+console.log(`Run ID: ${result.runId}, Bundle: ${result.bundleSha256}`);
+
+// 3. Prove
+await skill.prove(
+    result.bundlePath,
+    result.runId,
+    result.summary,
+    result.policyHash,
+    result.bundleSha256
+);
+```
+
+## Verification
+
+To test the integration end-to-end (seed workspace -> plan -> execute -> prove):
+
+```bash
+# 1. Seed a demo workspace
+node scripts/seed_workspace.mjs
+
+# 2. Run the integration test script
+node packages/openclaw-skill/dist/demo.js
+```

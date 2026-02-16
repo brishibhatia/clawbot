@@ -1,0 +1,25 @@
+archives\backup-2024.tar.gz
+archives\old-project.zip
+code\app.ts
+code\config.json
+code\utils.py
+documents\budget_2025.xlsx
+documents\important_doc.txt
+documents\important_doc_backup.txt
+documents\important_doc_copy.txt
+documents\meeting notes.docx
+documents\quarterly-report.pdf
+documents\readme.md
+downloads\file (1).txt
+downloads\file (2).txt
+downloads\random_installer.exe
+downloads\unnamed_file
+media\podcast_episode.mp3
+media\presentation_recording.mp4
+media\vacation_photo.jpg
+repos\sample-project\README.md
+repos\sample-project\package.json
+repos\sample-project\src\index.ts
+suspicious\invoice.pdf.exe
+suspicious\readme.doc.bat
+suspicious\totally_safe.jpg.scr

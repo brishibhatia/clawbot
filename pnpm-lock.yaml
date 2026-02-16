@@ -108,6 +108,28 @@ importers:
         specifier: ^5.7.0
         version: 5.9.3
 
+  packages/openclaw-skill:
+    dependencies:
+      '@deepclean/core':
+        specifier: workspace:*
+        version: link:../core
+      '@deepclean/walrus-sui':
+        specifier: workspace:*
+        version: link:../walrus-sui
+      '@mysten/sui':
+        specifier: ^1.4.0
+        version: 1.45.2(typescript@5.9.3)
+      pino:
+        specifier: ^9.6.0
+        version: 9.14.0
+    devDependencies:
+      '@types/node':
+        specifier: ^22.0.0
+        version: 22.19.11
+      typescript:
+        specifier: ^5.7.0
+        version: 5.9.3
+
   packages/walrus-sui:
     dependencies:
       '@mysten/sui':

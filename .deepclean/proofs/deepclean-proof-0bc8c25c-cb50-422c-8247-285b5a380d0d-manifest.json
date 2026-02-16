@@ -1,0 +1,981 @@
+{
+  "runId": "0bc8c25c-cb50-422c-8247-285b5a380d0d",
+  "startTimestamp": "2026-02-16T17:28:46.502Z",
+  "endTimestamp": "2026-02-16T17:28:46.676Z",
+  "policyVersion": "1.0.0",
+  "policyHash": "74864086e4609ac4586fb5a94eed904791b0bc9c5a46e21e0bb0b5fdd3af4f91",
+  "planHash": "edf06a170519c3aa07c0b130e8c80617ca05c347bb98cc4fac3aee247846b4dd",
+  "environment": {
+    "os": "win32-x64",
+    "nodeVersion": "v22.14.0",
+    "toolVersions": {
+      "deepclean": "0.1.0"
+    }
+  },
+  "plannedActions": [
+    {
+      "id": "cde658d4-0ba5-4d4e-9ce6-420dc9306121",
+      "type": "unzip",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\archives\\backup-2024.tar.gz",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean\\staging\\backup-2024.tar",
+      "reason": "Archive file — auto-unzip to staging",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\archives\\backup-2024.tar.gz",
+        "relativePath": "archives\\backup-2024.tar.gz",
+        "size": 178,
+        "mtime": "2026-02-16T17:28:01.136Z",
+        "sha256": "408abd5dfb18bb696b1029406c060a62c1107d2110ea6ff121ccfda21e0fd866",
+        "category": "archive",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "99d735ea-4660-467c-b677-b8d4ce5722b2",
+      "type": "rename",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\archives\\backup-2024.tar.gz",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\archives\\2026-02-16_backup-2024.tar.gz",
+      "reason": "Rename with date prefix: 2026-02-16_backup-2024.tar.gz",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\archives\\backup-2024.tar.gz",
+        "relativePath": "archives\\backup-2024.tar.gz",
+        "size": 178,
+        "mtime": "2026-02-16T17:28:01.136Z",
+        "sha256": "408abd5dfb18bb696b1029406c060a62c1107d2110ea6ff121ccfda21e0fd866",
+        "category": "archive",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "9dea8045-da2f-4523-9b51-c793fa13b763",
+      "type": "unzip",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\archives\\old-project.zip",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean\\staging\\old-project",
+      "reason": "Archive file — auto-unzip to staging",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\archives\\old-project.zip",
+        "relativePath": "archives\\old-project.zip",
+        "size": 166,
+        "mtime": "2026-02-16T17:28:01.148Z",
+        "sha256": "5d68b6876cf0f6a973e1422f7eea03f378a432e6e64485111c8fb1373b4c53d6",
+        "category": "archive",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "ae647471-bd1b-4080-acba-46a376866659",
+      "type": "rename",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\archives\\old-project.zip",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\archives\\2026-02-16_old-project.zip",
+      "reason": "Rename with date prefix: 2026-02-16_old-project.zip",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\archives\\old-project.zip",
+        "relativePath": "archives\\old-project.zip",
+        "size": 166,
+        "mtime": "2026-02-16T17:28:01.148Z",
+        "sha256": "5d68b6876cf0f6a973e1422f7eea03f378a432e6e64485111c8fb1373b4c53d6",
+        "category": "archive",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "5e93f01c-270a-44c9-bde7-af0b1bd94a7f",
+      "type": "rename",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\code\\app.ts",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\code\\2026-02-16_app.ts",
+      "reason": "Rename with date prefix: 2026-02-16_app.ts",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\code\\app.ts",
+        "relativePath": "code\\app.ts",
+        "size": 48,
+        "mtime": "2026-02-16T17:28:01.101Z",
+        "sha256": "032ea0bbb8f1300ae1ff4c6c5889cd992ddb4fd2bbe4d384418791f05bd546d5",
+        "category": "code",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "c43545b9-e6ac-4b22-8e49-deee0a58cb18",
+      "type": "rename",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\code\\config.json",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\code\\2026-02-16_config.json",
+      "reason": "Rename with date prefix: 2026-02-16_config.json",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\code\\config.json",
+        "relativePath": "code\\config.json",
+        "size": 31,
+        "mtime": "2026-02-16T17:28:01.105Z",
+        "sha256": "e2f9ed8496e60688e1de93edd24771cf766a6573baea0435fe042a2239fd6f57",
+        "category": "code",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "ae957a8b-70fc-46c3-b3d5-08da724ba485",
+      "type": "rename",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\code\\utils.py",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\code\\2026-02-16_utils.py",
+      "reason": "Rename with date prefix: 2026-02-16_utils.py",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\code\\utils.py",
+        "relativePath": "code\\utils.py",
+        "size": 23,
+        "mtime": "2026-02-16T17:28:01.103Z",
+        "sha256": "b396c5423bc8b7f1162144d1cc8405b4ecae448cafd41daa6054cd1796e2cad0",
+        "category": "code",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "2d32b3b4-fb37-4e0f-a0e4-7e61d7fbc1e1",
+      "type": "rename",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\budget_2025.xlsx",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\2026-02-16_budget_2025.xlsx",
+      "reason": "Rename with date prefix: 2026-02-16_budget_2025.xlsx",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\budget_2025.xlsx",
+        "relativePath": "documents\\budget_2025.xlsx",
+        "size": 32,
+        "mtime": "2026-02-16T17:28:01.088Z",
+        "sha256": "9f84c6b2469a8f4cde68dc250d9098359a56eb4f125ef17e3d73c62f1e28204b",
+        "category": "document",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "66ba5b0a-ab48-49c2-80dc-5eeeedc3b323",
+      "type": "rename",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\important_doc.txt",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\2026-02-16_important_doc.txt",
+      "reason": "Rename with date prefix: 2026-02-16_important_doc.txt",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\important_doc.txt",
+        "relativePath": "documents\\important_doc.txt",
+        "size": 58,
+        "mtime": "2026-02-16T17:28:01.154Z",
+        "sha256": "7bea0abaa57720e2dc8d72691e7aab968f29dae1e3922822eda9ed2656f520b1",
+        "category": "document",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "0a5f38f3-2f54-40fe-b601-edc3c5a00754",
+      "type": "dedupe",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\important_doc_backup.txt",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean\\quarantine\\dupes\\documents\\important_doc_backup.txt",
+      "reason": "Duplicate of important_doc.txt",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\important_doc_backup.txt",
+        "relativePath": "documents\\important_doc_backup.txt",
+        "size": 58,
+        "mtime": "2026-02-16T17:28:01.158Z",
+        "sha256": "7bea0abaa57720e2dc8d72691e7aab968f29dae1e3922822eda9ed2656f520b1",
+        "category": "document",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "1139714e-2f87-45f8-b229-9ec44dfa6881",
+      "type": "dedupe",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\important_doc_copy.txt",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean\\quarantine\\dupes\\documents\\important_doc_copy.txt",
+      "reason": "Duplicate of important_doc.txt",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\important_doc_copy.txt",
+        "relativePath": "documents\\important_doc_copy.txt",
+        "size": 58,
+        "mtime": "2026-02-16T17:28:01.156Z",
+        "sha256": "7bea0abaa57720e2dc8d72691e7aab968f29dae1e3922822eda9ed2656f520b1",
+        "category": "document",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "a3b36e5a-616a-4aed-b262-0073497c9e6b",
+      "type": "rename",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\meeting notes.docx",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\2026-02-16_meeting_notes.docx",
+      "reason": "Rename with date prefix: 2026-02-16_meeting_notes.docx",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\meeting notes.docx",
+        "relativePath": "documents\\meeting notes.docx",
+        "size": 49,
+        "mtime": "2026-02-16T17:28:01.080Z",
+        "sha256": "83b9db18e372921e967ffc42ce199ec0d7eae21d3255a48a29cc06c9430aab0a",
+        "category": "document",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "b60fa5be-6ea9-4eac-8e11-5c7b53bb418b",
+      "type": "rename",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\quarterly-report.pdf",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\2026-02-16_quarterly-report.pdf",
+      "reason": "Rename with date prefix: 2026-02-16_quarterly-report.pdf",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\quarterly-report.pdf",
+        "relativePath": "documents\\quarterly-report.pdf",
+        "size": 30,
+        "mtime": "2026-02-16T17:28:01.085Z",
+        "sha256": "31165ad1ab50ddf4a5e0ae059bef9f3f6780f17b0054e5fa586082379cd8b160",
+        "category": "document",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "ba8e9bf0-678f-4ae7-8c4e-c1072b144e6e",
+      "type": "rename",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\readme.md",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\2026-02-16_readme.md",
+      "reason": "Rename with date prefix: 2026-02-16_readme.md",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\readme.md",
+        "relativePath": "documents\\readme.md",
+        "size": 37,
+        "mtime": "2026-02-16T17:28:01.089Z",
+        "sha256": "21ae8f39cc9a2064cf1ba1b26f836001d6eacdca5e62c914f68c0aaecbe98f39",
+        "category": "document",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "548d4228-8f57-4d80-9baa-0158674feff2",
+      "type": "rename",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\downloads\\file (1).txt",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\downloads\\2026-02-16_file__1_.txt",
+      "reason": "Rename with date prefix: 2026-02-16_file__1_.txt",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\downloads\\file (1).txt",
+        "relativePath": "downloads\\file (1).txt",
+        "size": 21,
+        "mtime": "2026-02-16T17:28:01.172Z",
+        "sha256": "2eda8f36d95c33fb4c08cd6a952d647b3a30f4e81f3d6c7403ecf2f8eb5c4c54",
+        "category": "document",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "2bc7cabd-3898-413e-bb95-93e5a646579a",
+      "type": "rename",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\downloads\\file (2).txt",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\downloads\\2026-02-16_file__2_.txt",
+      "reason": "Rename with date prefix: 2026-02-16_file__2_.txt",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\downloads\\file (2).txt",
+        "relativePath": "downloads\\file (2).txt",
+        "size": 12,
+        "mtime": "2026-02-16T17:28:01.174Z",
+        "sha256": "6d0f353625c21cdcf35ffc7b764e8136b462414267bec48c990a6ed9536fcbb2",
+        "category": "document",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "fb567301-e415-4564-ab1d-1e2e72e6b4a5",
+      "type": "rename",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\downloads\\random_installer.exe",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\downloads\\2026-02-16_random_installer.exe",
+      "reason": "Rename with date prefix: 2026-02-16_random_installer.exe",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\downloads\\random_installer.exe",
+        "relativePath": "downloads\\random_installer.exe",
+        "size": 256,
+        "mtime": "2026-02-16T17:28:01.169Z",
+        "sha256": "e4ca7aa807fe6f65ea9efa4233d0fe26f1912cf0ccdf0db2dc26ddcf281880dc",
+        "category": "executable",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "4a408c27-406b-4222-9c23-2b2d4fafe7cb",
+      "type": "rename",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\downloads\\unnamed_file",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\downloads\\2026-02-16_unnamed_file",
+      "reason": "Rename with date prefix: 2026-02-16_unnamed_file",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\downloads\\unnamed_file",
+        "relativePath": "downloads\\unnamed_file",
+        "size": 17,
+        "mtime": "2026-02-16T17:28:01.170Z",
+        "sha256": "ff6d1bc5ed914228b148283d18151db0d40332416beb6f06cb3e6f2cb3d080f8",
+        "category": "unknown",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "6680cd25-0e2e-4a1a-bc26-c96cea419b68",
+      "type": "rename",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\media\\podcast_episode.mp3",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\media\\2026-02-16_podcast_episode.mp3",
+      "reason": "Rename with date prefix: 2026-02-16_podcast_episode.mp3",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\media\\podcast_episode.mp3",
+        "relativePath": "media\\podcast_episode.mp3",
+        "size": 1024,
+        "mtime": "2026-02-16T17:28:01.099Z",
+        "sha256": "94d09f4dbed51c3b4661b166ec98de369ac3ea8b0881d8006cbd230289bd14a6",
+        "category": "media",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "8bff96f7-1fad-4e2b-bd9a-e9276da4400d",
+      "type": "rename",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\media\\presentation_recording.mp4",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\media\\2026-02-16_presentation_recording.mp4",
+      "reason": "Rename with date prefix: 2026-02-16_presentation_recording.mp4",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\media\\presentation_recording.mp4",
+        "relativePath": "media\\presentation_recording.mp4",
+        "size": 4096,
+        "mtime": "2026-02-16T17:28:01.096Z",
+        "sha256": "ffb03390f6302e7ee43e88c5fef41f523efb6c92d0bc7d401e5c8f7c556cf2fe",
+        "category": "media",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "30c23474-c85e-4121-9087-33e7a6c4ee07",
+      "type": "rename",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\media\\vacation_photo.jpg",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\media\\2026-02-16_vacation_photo.jpg",
+      "reason": "Rename with date prefix: 2026-02-16_vacation_photo.jpg",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\media\\vacation_photo.jpg",
+        "relativePath": "media\\vacation_photo.jpg",
+        "size": 2048,
+        "mtime": "2026-02-16T17:28:01.094Z",
+        "sha256": "b6cda4f80ee61f64e1644fd68afc26d3c8f2be46fe6064fd98c19908ab003536",
+        "category": "media",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "0a9144fd-955f-466a-a05e-916e8c56ca8e",
+      "type": "quarantine",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\suspicious\\invoice.pdf.exe",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean\\quarantine\\suspicious\\invoice.pdf.exe",
+      "reason": "Double extension detected: invoice.pdf.exe",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\suspicious\\invoice.pdf.exe",
+        "relativePath": "suspicious\\invoice.pdf.exe",
+        "size": 50,
+        "mtime": "2026-02-16T17:28:01.161Z",
+        "sha256": "66ef6574da9eb3505cdb401fa82f0c164afb4161c12dcc1c7c5ebf89376aa292",
+        "category": "executable",
+        "suspicious": true,
+        "suspiciousReason": "Double extension detected: invoice.pdf.exe"
+      }
+    },
+    {
+      "id": "d4b60af5-57c3-4d5a-a78b-cd091b734eb0",
+      "type": "quarantine",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\suspicious\\readme.doc.bat",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean\\quarantine\\suspicious\\readme.doc.bat",
+      "reason": "Double extension detected: readme.doc.bat",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\suspicious\\readme.doc.bat",
+        "relativePath": "suspicious\\readme.doc.bat",
+        "size": 33,
+        "mtime": "2026-02-16T17:28:01.162Z",
+        "sha256": "9a19d88a977960da44e3f64f83ff862faa3315044ec8529ee8208301c673630a",
+        "category": "code",
+        "suspicious": true,
+        "suspiciousReason": "Double extension detected: readme.doc.bat"
+      }
+    },
+    {
+      "id": "2b20fa43-0d64-4dad-9e6b-4e96fcf94cfd",
+      "type": "quarantine",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\suspicious\\totally_safe.jpg.scr",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean\\quarantine\\suspicious\\totally_safe.jpg.scr",
+      "reason": "Double extension detected: totally_safe.jpg.scr",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\suspicious\\totally_safe.jpg.scr",
+        "relativePath": "suspicious\\totally_safe.jpg.scr",
+        "size": 128,
+        "mtime": "2026-02-16T17:28:01.165Z",
+        "sha256": "6f33709d2ded93d835e6711d2931d73ebe9ca3f1d169cdd3996d4d5d7f16819e",
+        "category": "unknown",
+        "suspicious": true,
+        "suspiciousReason": "Double extension detected: totally_safe.jpg.scr"
+      }
+    },
+    {
+      "id": "d49f73d2-2805-43d3-aff1-43ef129698ad",
+      "type": "rename",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\repos\\sample-project\\package.json",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\repos\\sample-project\\2026-02-16_package.json",
+      "reason": "Rename with date prefix: 2026-02-16_package.json",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\repos\\sample-project\\package.json",
+        "relativePath": "repos\\sample-project\\package.json",
+        "size": 43,
+        "mtime": "2026-02-16T17:28:01.177Z",
+        "sha256": "fb032658a389aaf5a1b73ddb481492c02776ba510438fc25392b380bbc39f846",
+        "category": "code",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "446d9599-7b9b-4446-aeaa-df4ba127411e",
+      "type": "rename",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\repos\\sample-project\\README.md",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\repos\\sample-project\\2026-02-16_README.md",
+      "reason": "Rename with date prefix: 2026-02-16_README.md",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\repos\\sample-project\\README.md",
+        "relativePath": "repos\\sample-project\\README.md",
+        "size": 43,
+        "mtime": "2026-02-16T17:28:01.182Z",
+        "sha256": "5956e91c36980052f1e3ab4a75de494f325d9ec80d683ecedc80450f505ae409",
+        "category": "document",
+        "suspicious": false
+      }
+    },
+    {
+      "id": "a871e3f0-7dff-4b82-b455-36b8eab38f75",
+      "type": "rename",
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\repos\\sample-project\\src\\index.ts",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\repos\\sample-project\\src\\2026-02-16_index.ts",
+      "reason": "Rename with date prefix: 2026-02-16_index.ts",
+      "fileInfo": {
+        "path": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\repos\\sample-project\\src\\index.ts",
+        "relativePath": "repos\\sample-project\\src\\index.ts",
+        "size": 41,
+        "mtime": "2026-02-16T17:28:01.180Z",
+        "sha256": "548cc2b99e2470dab09708cb96e876f9053f68fa3397ce5ea7d75d22c327b621",
+        "category": "code",
+        "suspicious": false
+      }
+    }
+  ],
+  "executedActions": [
+    {
+      "actionId": "cde658d4-0ba5-4d4e-9ce6-420dc9306121",
+      "type": "unzip",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\archives\\backup-2024.tar.gz",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean\\staging\\backup-2024.tar",
+      "reason": "Archive file — auto-unzip to staging",
+      "beforeMeta": {
+        "size": 178,
+        "mtime": "2026-02-16T17:28:01.136Z",
+        "sha256": "408abd5dfb18bb696b1029406c060a62c1107d2110ea6ff121ccfda21e0fd866"
+      }
+    },
+    {
+      "actionId": "99d735ea-4660-467c-b677-b8d4ce5722b2",
+      "type": "rename",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\archives\\backup-2024.tar.gz",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\archives\\2026-02-16_backup-2024.tar.gz",
+      "reason": "Rename with date prefix: 2026-02-16_backup-2024.tar.gz",
+      "beforeMeta": {
+        "size": 178,
+        "mtime": "2026-02-16T17:28:01.136Z",
+        "sha256": "408abd5dfb18bb696b1029406c060a62c1107d2110ea6ff121ccfda21e0fd866"
+      },
+      "afterMeta": {
+        "size": 178,
+        "mtime": "2026-02-16T17:28:01.136Z",
+        "sha256": "408abd5dfb18bb696b1029406c060a62c1107d2110ea6ff121ccfda21e0fd866"
+      }
+    },
+    {
+      "actionId": "9dea8045-da2f-4523-9b51-c793fa13b763",
+      "type": "unzip",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\archives\\old-project.zip",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean\\staging\\old-project",
+      "reason": "Archive file — auto-unzip to staging",
+      "beforeMeta": {
+        "size": 166,
+        "mtime": "2026-02-16T17:28:01.148Z",
+        "sha256": "5d68b6876cf0f6a973e1422f7eea03f378a432e6e64485111c8fb1373b4c53d6"
+      }
+    },
+    {
+      "actionId": "ae647471-bd1b-4080-acba-46a376866659",
+      "type": "rename",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\archives\\old-project.zip",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\archives\\2026-02-16_old-project.zip",
+      "reason": "Rename with date prefix: 2026-02-16_old-project.zip",
+      "beforeMeta": {
+        "size": 166,
+        "mtime": "2026-02-16T17:28:01.148Z",
+        "sha256": "5d68b6876cf0f6a973e1422f7eea03f378a432e6e64485111c8fb1373b4c53d6"
+      },
+      "afterMeta": {
+        "size": 166,
+        "mtime": "2026-02-16T17:28:01.148Z",
+        "sha256": "5d68b6876cf0f6a973e1422f7eea03f378a432e6e64485111c8fb1373b4c53d6"
+      }
+    },
+    {
+      "actionId": "5e93f01c-270a-44c9-bde7-af0b1bd94a7f",
+      "type": "rename",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\code\\app.ts",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\code\\2026-02-16_app.ts",
+      "reason": "Rename with date prefix: 2026-02-16_app.ts",
+      "beforeMeta": {
+        "size": 48,
+        "mtime": "2026-02-16T17:28:01.101Z",
+        "sha256": "032ea0bbb8f1300ae1ff4c6c5889cd992ddb4fd2bbe4d384418791f05bd546d5"
+      },
+      "afterMeta": {
+        "size": 48,
+        "mtime": "2026-02-16T17:28:01.101Z",
+        "sha256": "032ea0bbb8f1300ae1ff4c6c5889cd992ddb4fd2bbe4d384418791f05bd546d5"
+      }
+    },
+    {
+      "actionId": "c43545b9-e6ac-4b22-8e49-deee0a58cb18",
+      "type": "rename",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\code\\config.json",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\code\\2026-02-16_config.json",
+      "reason": "Rename with date prefix: 2026-02-16_config.json",
+      "beforeMeta": {
+        "size": 31,
+        "mtime": "2026-02-16T17:28:01.105Z",
+        "sha256": "e2f9ed8496e60688e1de93edd24771cf766a6573baea0435fe042a2239fd6f57"
+      },
+      "afterMeta": {
+        "size": 31,
+        "mtime": "2026-02-16T17:28:01.105Z",
+        "sha256": "e2f9ed8496e60688e1de93edd24771cf766a6573baea0435fe042a2239fd6f57"
+      }
+    },
+    {
+      "actionId": "ae957a8b-70fc-46c3-b3d5-08da724ba485",
+      "type": "rename",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\code\\utils.py",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\code\\2026-02-16_utils.py",
+      "reason": "Rename with date prefix: 2026-02-16_utils.py",
+      "beforeMeta": {
+        "size": 23,
+        "mtime": "2026-02-16T17:28:01.103Z",
+        "sha256": "b396c5423bc8b7f1162144d1cc8405b4ecae448cafd41daa6054cd1796e2cad0"
+      },
+      "afterMeta": {
+        "size": 23,
+        "mtime": "2026-02-16T17:28:01.103Z",
+        "sha256": "b396c5423bc8b7f1162144d1cc8405b4ecae448cafd41daa6054cd1796e2cad0"
+      }
+    },
+    {
+      "actionId": "2d32b3b4-fb37-4e0f-a0e4-7e61d7fbc1e1",
+      "type": "rename",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\budget_2025.xlsx",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\2026-02-16_budget_2025.xlsx",
+      "reason": "Rename with date prefix: 2026-02-16_budget_2025.xlsx",
+      "beforeMeta": {
+        "size": 32,
+        "mtime": "2026-02-16T17:28:01.088Z",
+        "sha256": "9f84c6b2469a8f4cde68dc250d9098359a56eb4f125ef17e3d73c62f1e28204b"
+      },
+      "afterMeta": {
+        "size": 32,
+        "mtime": "2026-02-16T17:28:01.088Z",
+        "sha256": "9f84c6b2469a8f4cde68dc250d9098359a56eb4f125ef17e3d73c62f1e28204b"
+      }
+    },
+    {
+      "actionId": "66ba5b0a-ab48-49c2-80dc-5eeeedc3b323",
+      "type": "rename",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\important_doc.txt",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\2026-02-16_important_doc.txt",
+      "reason": "Rename with date prefix: 2026-02-16_important_doc.txt",
+      "beforeMeta": {
+        "size": 58,
+        "mtime": "2026-02-16T17:28:01.154Z",
+        "sha256": "7bea0abaa57720e2dc8d72691e7aab968f29dae1e3922822eda9ed2656f520b1"
+      },
+      "afterMeta": {
+        "size": 58,
+        "mtime": "2026-02-16T17:28:01.154Z",
+        "sha256": "7bea0abaa57720e2dc8d72691e7aab968f29dae1e3922822eda9ed2656f520b1"
+      }
+    },
+    {
+      "actionId": "0a5f38f3-2f54-40fe-b601-edc3c5a00754",
+      "type": "dedupe",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\important_doc_backup.txt",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean\\quarantine\\dupes\\documents\\important_doc_backup.txt",
+      "reason": "Duplicate of important_doc.txt",
+      "beforeMeta": {
+        "size": 58,
+        "mtime": "2026-02-16T17:28:01.158Z",
+        "sha256": "7bea0abaa57720e2dc8d72691e7aab968f29dae1e3922822eda9ed2656f520b1"
+      },
+      "afterMeta": {
+        "size": 58,
+        "mtime": "2026-02-16T17:28:01.158Z",
+        "sha256": "7bea0abaa57720e2dc8d72691e7aab968f29dae1e3922822eda9ed2656f520b1"
+      }
+    },
+    {
+      "actionId": "1139714e-2f87-45f8-b229-9ec44dfa6881",
+      "type": "dedupe",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\important_doc_copy.txt",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean\\quarantine\\dupes\\documents\\important_doc_copy.txt",
+      "reason": "Duplicate of important_doc.txt",
+      "beforeMeta": {
+        "size": 58,
+        "mtime": "2026-02-16T17:28:01.156Z",
+        "sha256": "7bea0abaa57720e2dc8d72691e7aab968f29dae1e3922822eda9ed2656f520b1"
+      },
+      "afterMeta": {
+        "size": 58,
+        "mtime": "2026-02-16T17:28:01.156Z",
+        "sha256": "7bea0abaa57720e2dc8d72691e7aab968f29dae1e3922822eda9ed2656f520b1"
+      }
+    },
+    {
+      "actionId": "a3b36e5a-616a-4aed-b262-0073497c9e6b",
+      "type": "rename",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\meeting notes.docx",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\2026-02-16_meeting_notes.docx",
+      "reason": "Rename with date prefix: 2026-02-16_meeting_notes.docx",
+      "beforeMeta": {
+        "size": 49,
+        "mtime": "2026-02-16T17:28:01.080Z",
+        "sha256": "83b9db18e372921e967ffc42ce199ec0d7eae21d3255a48a29cc06c9430aab0a"
+      },
+      "afterMeta": {
+        "size": 49,
+        "mtime": "2026-02-16T17:28:01.080Z",
+        "sha256": "83b9db18e372921e967ffc42ce199ec0d7eae21d3255a48a29cc06c9430aab0a"
+      }
+    },
+    {
+      "actionId": "b60fa5be-6ea9-4eac-8e11-5c7b53bb418b",
+      "type": "rename",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\quarterly-report.pdf",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\2026-02-16_quarterly-report.pdf",
+      "reason": "Rename with date prefix: 2026-02-16_quarterly-report.pdf",
+      "beforeMeta": {
+        "size": 30,
+        "mtime": "2026-02-16T17:28:01.085Z",
+        "sha256": "31165ad1ab50ddf4a5e0ae059bef9f3f6780f17b0054e5fa586082379cd8b160"
+      },
+      "afterMeta": {
+        "size": 30,
+        "mtime": "2026-02-16T17:28:01.085Z",
+        "sha256": "31165ad1ab50ddf4a5e0ae059bef9f3f6780f17b0054e5fa586082379cd8b160"
+      }
+    },
+    {
+      "actionId": "ba8e9bf0-678f-4ae7-8c4e-c1072b144e6e",
+      "type": "rename",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\readme.md",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\documents\\2026-02-16_readme.md",
+      "reason": "Rename with date prefix: 2026-02-16_readme.md",
+      "beforeMeta": {
+        "size": 37,
+        "mtime": "2026-02-16T17:28:01.089Z",
+        "sha256": "21ae8f39cc9a2064cf1ba1b26f836001d6eacdca5e62c914f68c0aaecbe98f39"
+      },
+      "afterMeta": {
+        "size": 37,
+        "mtime": "2026-02-16T17:28:01.089Z",
+        "sha256": "21ae8f39cc9a2064cf1ba1b26f836001d6eacdca5e62c914f68c0aaecbe98f39"
+      }
+    },
+    {
+      "actionId": "548d4228-8f57-4d80-9baa-0158674feff2",
+      "type": "rename",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\downloads\\file (1).txt",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\downloads\\2026-02-16_file__1_.txt",
+      "reason": "Rename with date prefix: 2026-02-16_file__1_.txt",
+      "beforeMeta": {
+        "size": 21,
+        "mtime": "2026-02-16T17:28:01.172Z",
+        "sha256": "2eda8f36d95c33fb4c08cd6a952d647b3a30f4e81f3d6c7403ecf2f8eb5c4c54"
+      },
+      "afterMeta": {
+        "size": 21,
+        "mtime": "2026-02-16T17:28:01.172Z",
+        "sha256": "2eda8f36d95c33fb4c08cd6a952d647b3a30f4e81f3d6c7403ecf2f8eb5c4c54"
+      }
+    },
+    {
+      "actionId": "2bc7cabd-3898-413e-bb95-93e5a646579a",
+      "type": "rename",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\downloads\\file (2).txt",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\downloads\\2026-02-16_file__2_.txt",
+      "reason": "Rename with date prefix: 2026-02-16_file__2_.txt",
+      "beforeMeta": {
+        "size": 12,
+        "mtime": "2026-02-16T17:28:01.174Z",
+        "sha256": "6d0f353625c21cdcf35ffc7b764e8136b462414267bec48c990a6ed9536fcbb2"
+      },
+      "afterMeta": {
+        "size": 12,
+        "mtime": "2026-02-16T17:28:01.174Z",
+        "sha256": "6d0f353625c21cdcf35ffc7b764e8136b462414267bec48c990a6ed9536fcbb2"
+      }
+    },
+    {
+      "actionId": "fb567301-e415-4564-ab1d-1e2e72e6b4a5",
+      "type": "rename",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\downloads\\random_installer.exe",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\downloads\\2026-02-16_random_installer.exe",
+      "reason": "Rename with date prefix: 2026-02-16_random_installer.exe",
+      "beforeMeta": {
+        "size": 256,
+        "mtime": "2026-02-16T17:28:01.169Z",
+        "sha256": "e4ca7aa807fe6f65ea9efa4233d0fe26f1912cf0ccdf0db2dc26ddcf281880dc"
+      },
+      "afterMeta": {
+        "size": 256,
+        "mtime": "2026-02-16T17:28:01.169Z",
+        "sha256": "e4ca7aa807fe6f65ea9efa4233d0fe26f1912cf0ccdf0db2dc26ddcf281880dc"
+      }
+    },
+    {
+      "actionId": "4a408c27-406b-4222-9c23-2b2d4fafe7cb",
+      "type": "rename",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\downloads\\unnamed_file",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\downloads\\2026-02-16_unnamed_file",
+      "reason": "Rename with date prefix: 2026-02-16_unnamed_file",
+      "beforeMeta": {
+        "size": 17,
+        "mtime": "2026-02-16T17:28:01.170Z",
+        "sha256": "ff6d1bc5ed914228b148283d18151db0d40332416beb6f06cb3e6f2cb3d080f8"
+      },
+      "afterMeta": {
+        "size": 17,
+        "mtime": "2026-02-16T17:28:01.170Z",
+        "sha256": "ff6d1bc5ed914228b148283d18151db0d40332416beb6f06cb3e6f2cb3d080f8"
+      }
+    },
+    {
+      "actionId": "6680cd25-0e2e-4a1a-bc26-c96cea419b68",
+      "type": "rename",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\media\\podcast_episode.mp3",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\media\\2026-02-16_podcast_episode.mp3",
+      "reason": "Rename with date prefix: 2026-02-16_podcast_episode.mp3",
+      "beforeMeta": {
+        "size": 1024,
+        "mtime": "2026-02-16T17:28:01.099Z",
+        "sha256": "94d09f4dbed51c3b4661b166ec98de369ac3ea8b0881d8006cbd230289bd14a6"
+      },
+      "afterMeta": {
+        "size": 1024,
+        "mtime": "2026-02-16T17:28:01.099Z",
+        "sha256": "94d09f4dbed51c3b4661b166ec98de369ac3ea8b0881d8006cbd230289bd14a6"
+      }
+    },
+    {
+      "actionId": "8bff96f7-1fad-4e2b-bd9a-e9276da4400d",
+      "type": "rename",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\media\\presentation_recording.mp4",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\media\\2026-02-16_presentation_recording.mp4",
+      "reason": "Rename with date prefix: 2026-02-16_presentation_recording.mp4",
+      "beforeMeta": {
+        "size": 4096,
+        "mtime": "2026-02-16T17:28:01.096Z",
+        "sha256": "ffb03390f6302e7ee43e88c5fef41f523efb6c92d0bc7d401e5c8f7c556cf2fe"
+      },
+      "afterMeta": {
+        "size": 4096,
+        "mtime": "2026-02-16T17:28:01.096Z",
+        "sha256": "ffb03390f6302e7ee43e88c5fef41f523efb6c92d0bc7d401e5c8f7c556cf2fe"
+      }
+    },
+    {
+      "actionId": "30c23474-c85e-4121-9087-33e7a6c4ee07",
+      "type": "rename",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\media\\vacation_photo.jpg",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\media\\2026-02-16_vacation_photo.jpg",
+      "reason": "Rename with date prefix: 2026-02-16_vacation_photo.jpg",
+      "beforeMeta": {
+        "size": 2048,
+        "mtime": "2026-02-16T17:28:01.094Z",
+        "sha256": "b6cda4f80ee61f64e1644fd68afc26d3c8f2be46fe6064fd98c19908ab003536"
+      },
+      "afterMeta": {
+        "size": 2048,
+        "mtime": "2026-02-16T17:28:01.094Z",
+        "sha256": "b6cda4f80ee61f64e1644fd68afc26d3c8f2be46fe6064fd98c19908ab003536"
+      }
+    },
+    {
+      "actionId": "0a9144fd-955f-466a-a05e-916e8c56ca8e",
+      "type": "quarantine",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\suspicious\\invoice.pdf.exe",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean\\quarantine\\suspicious\\invoice.pdf.exe",
+      "reason": "Double extension detected: invoice.pdf.exe",
+      "beforeMeta": {
+        "size": 50,
+        "mtime": "2026-02-16T17:28:01.161Z",
+        "sha256": "66ef6574da9eb3505cdb401fa82f0c164afb4161c12dcc1c7c5ebf89376aa292"
+      },
+      "afterMeta": {
+        "size": 50,
+        "mtime": "2026-02-16T17:28:01.161Z",
+        "sha256": "66ef6574da9eb3505cdb401fa82f0c164afb4161c12dcc1c7c5ebf89376aa292"
+      }
+    },
+    {
+      "actionId": "d4b60af5-57c3-4d5a-a78b-cd091b734eb0",
+      "type": "quarantine",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\suspicious\\readme.doc.bat",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean\\quarantine\\suspicious\\readme.doc.bat",
+      "reason": "Double extension detected: readme.doc.bat",
+      "beforeMeta": {
+        "size": 33,
+        "mtime": "2026-02-16T17:28:01.162Z",
+        "sha256": "9a19d88a977960da44e3f64f83ff862faa3315044ec8529ee8208301c673630a"
+      },
+      "afterMeta": {
+        "size": 33,
+        "mtime": "2026-02-16T17:28:01.162Z",
+        "sha256": "9a19d88a977960da44e3f64f83ff862faa3315044ec8529ee8208301c673630a"
+      }
+    },
+    {
+      "actionId": "2b20fa43-0d64-4dad-9e6b-4e96fcf94cfd",
+      "type": "quarantine",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\suspicious\\totally_safe.jpg.scr",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean\\quarantine\\suspicious\\totally_safe.jpg.scr",
+      "reason": "Double extension detected: totally_safe.jpg.scr",
+      "beforeMeta": {
+        "size": 128,
+        "mtime": "2026-02-16T17:28:01.165Z",
+        "sha256": "6f33709d2ded93d835e6711d2931d73ebe9ca3f1d169cdd3996d4d5d7f16819e"
+      },
+      "afterMeta": {
+        "size": 128,
+        "mtime": "2026-02-16T17:28:01.165Z",
+        "sha256": "6f33709d2ded93d835e6711d2931d73ebe9ca3f1d169cdd3996d4d5d7f16819e"
+      }
+    },
+    {
+      "actionId": "d49f73d2-2805-43d3-aff1-43ef129698ad",
+      "type": "rename",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\repos\\sample-project\\package.json",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\repos\\sample-project\\2026-02-16_package.json",
+      "reason": "Rename with date prefix: 2026-02-16_package.json",
+      "beforeMeta": {
+        "size": 43,
+        "mtime": "2026-02-16T17:28:01.177Z",
+        "sha256": "fb032658a389aaf5a1b73ddb481492c02776ba510438fc25392b380bbc39f846"
+      },
+      "afterMeta": {
+        "size": 43,
+        "mtime": "2026-02-16T17:28:01.177Z",
+        "sha256": "fb032658a389aaf5a1b73ddb481492c02776ba510438fc25392b380bbc39f846"
+      }
+    },
+    {
+      "actionId": "446d9599-7b9b-4446-aeaa-df4ba127411e",
+      "type": "rename",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\repos\\sample-project\\README.md",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\repos\\sample-project\\2026-02-16_README.md",
+      "reason": "Rename with date prefix: 2026-02-16_README.md",
+      "beforeMeta": {
+        "size": 43,
+        "mtime": "2026-02-16T17:28:01.182Z",
+        "sha256": "5956e91c36980052f1e3ab4a75de494f325d9ec80d683ecedc80450f505ae409"
+      },
+      "afterMeta": {
+        "size": 43,
+        "mtime": "2026-02-16T17:28:01.182Z",
+        "sha256": "5956e91c36980052f1e3ab4a75de494f325d9ec80d683ecedc80450f505ae409"
+      }
+    },
+    {
+      "actionId": "a871e3f0-7dff-4b82-b455-36b8eab38f75",
+      "type": "rename",
+      "success": true,
+      "sourcePath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\repos\\sample-project\\src\\index.ts",
+      "targetPath": "C:\\Users\\Rishi bhatia\\clawbot\\.deepclean-demo\\repos\\sample-project\\src\\2026-02-16_index.ts",
+      "reason": "Rename with date prefix: 2026-02-16_index.ts",
+      "beforeMeta": {
+        "size": 41,
+        "mtime": "2026-02-16T17:28:01.180Z",
+        "sha256": "548cc2b99e2470dab09708cb96e876f9053f68fa3397ce5ea7d75d22c327b621"
+      },
+      "afterMeta": {
+        "size": 41,
+        "mtime": "2026-02-16T17:28:01.180Z",
+        "sha256": "548cc2b99e2470dab09708cb96e876f9053f68fa3397ce5ea7d75d22c327b621"
+      }
+    }
+  ],
+  "fileTreeBefore": [
+    "archives\\backup-2024.tar.gz",
+    "archives\\old-project.zip",
+    "code\\app.ts",
+    "code\\config.json",
+    "code\\utils.py",
+    "documents\\budget_2025.xlsx",
+    "documents\\important_doc.txt",
+    "documents\\important_doc_backup.txt",
+    "documents\\important_doc_copy.txt",
+    "documents\\meeting notes.docx",
+    "documents\\quarterly-report.pdf",
+    "documents\\readme.md",
+    "downloads\\file (1).txt",
+    "downloads\\file (2).txt",
+    "downloads\\random_installer.exe",
+    "downloads\\unnamed_file",
+    "media\\podcast_episode.mp3",
+    "media\\presentation_recording.mp4",
+    "media\\vacation_photo.jpg",
+    "repos\\sample-project\\README.md",
+    "repos\\sample-project\\package.json",
+    "repos\\sample-project\\src\\index.ts",
+    "suspicious\\invoice.pdf.exe",
+    "suspicious\\readme.doc.bat",
+    "suspicious\\totally_safe.jpg.scr"
+  ],
+  "fileTreeAfter": [
+    "archives\\2026-02-16_backup-2024.tar.gz",
+    "archives\\2026-02-16_old-project.zip",
+    "code\\2026-02-16_app.ts",
+    "code\\2026-02-16_config.json",
+    "code\\2026-02-16_utils.py",
+    "documents\\2026-02-16_budget_2025.xlsx",
+    "documents\\2026-02-16_important_doc.txt",
+    "documents\\2026-02-16_meeting_notes.docx",
+    "documents\\2026-02-16_quarterly-report.pdf",
+    "documents\\2026-02-16_readme.md",
+    "downloads\\2026-02-16_file__1_.txt",
+    "downloads\\2026-02-16_file__2_.txt",
+    "downloads\\2026-02-16_random_installer.exe",
+    "downloads\\2026-02-16_unnamed_file",
+    "media\\2026-02-16_podcast_episode.mp3",
+    "media\\2026-02-16_presentation_recording.mp4",
+    "media\\2026-02-16_vacation_photo.jpg",
+    "repos\\sample-project\\2026-02-16_README.md",
+    "repos\\sample-project\\2026-02-16_package.json",
+    "repos\\sample-project\\src\\2026-02-16_index.ts"
+  ],
+  "bundleSha256": "1ff3c1fa8f04a0485da7ed0dcd63d77fa6db89c27832231587bacb5c60567a55",
+  "summary": "27/27 actions succeeded"
+}

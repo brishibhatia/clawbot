@@ -1,0 +1,27 @@
+[UNZIP] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\archives\backup-2024.tar.gz -> C:\Users\Rishi bhatia\clawbot\.deepclean\staging\backup-2024.tar
+[RENAME] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\archives\backup-2024.tar.gz -> C:\Users\Rishi bhatia\clawbot\.deepclean-demo\archives\2026-02-16_backup-2024.tar.gz
+[UNZIP] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\archives\old-project.zip -> C:\Users\Rishi bhatia\clawbot\.deepclean\staging\old-project
+[RENAME] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\archives\old-project.zip -> C:\Users\Rishi bhatia\clawbot\.deepclean-demo\archives\2026-02-16_old-project.zip
+[RENAME] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\code\app.ts -> C:\Users\Rishi bhatia\clawbot\.deepclean-demo\code\2026-02-16_app.ts
+[RENAME] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\code\config.json -> C:\Users\Rishi bhatia\clawbot\.deepclean-demo\code\2026-02-16_config.json
+[RENAME] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\code\utils.py -> C:\Users\Rishi bhatia\clawbot\.deepclean-demo\code\2026-02-16_utils.py
+[RENAME] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\documents\budget_2025.xlsx -> C:\Users\Rishi bhatia\clawbot\.deepclean-demo\documents\2026-02-16_budget_2025.xlsx
+[RENAME] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\documents\important_doc.txt -> C:\Users\Rishi bhatia\clawbot\.deepclean-demo\documents\2026-02-16_important_doc.txt
+[DEDUPE] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\documents\important_doc_backup.txt -> C:\Users\Rishi bhatia\clawbot\.deepclean\quarantine\dupes\documents\important_doc_backup.txt
+[DEDUPE] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\documents\important_doc_copy.txt -> C:\Users\Rishi bhatia\clawbot\.deepclean\quarantine\dupes\documents\important_doc_copy.txt
+[RENAME] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\documents\meeting notes.docx -> C:\Users\Rishi bhatia\clawbot\.deepclean-demo\documents\2026-02-16_meeting_notes.docx
+[RENAME] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\documents\quarterly-report.pdf -> C:\Users\Rishi bhatia\clawbot\.deepclean-demo\documents\2026-02-16_quarterly-report.pdf
+[RENAME] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\documents\readme.md -> C:\Users\Rishi bhatia\clawbot\.deepclean-demo\documents\2026-02-16_readme.md
+[RENAME] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\downloads\file (1).txt -> C:\Users\Rishi bhatia\clawbot\.deepclean-demo\downloads\2026-02-16_file__1_.txt
+[RENAME] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\downloads\file (2).txt -> C:\Users\Rishi bhatia\clawbot\.deepclean-demo\downloads\2026-02-16_file__2_.txt
+[RENAME] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\downloads\random_installer.exe -> C:\Users\Rishi bhatia\clawbot\.deepclean-demo\downloads\2026-02-16_random_installer.exe
+[RENAME] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\downloads\unnamed_file -> C:\Users\Rishi bhatia\clawbot\.deepclean-demo\downloads\2026-02-16_unnamed_file
+[RENAME] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\media\podcast_episode.mp3 -> C:\Users\Rishi bhatia\clawbot\.deepclean-demo\media\2026-02-16_podcast_episode.mp3
+[RENAME] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\media\presentation_recording.mp4 -> C:\Users\Rishi bhatia\clawbot\.deepclean-demo\media\2026-02-16_presentation_recording.mp4
+[RENAME] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\media\vacation_photo.jpg -> C:\Users\Rishi bhatia\clawbot\.deepclean-demo\media\2026-02-16_vacation_photo.jpg
+[QUARANTINE] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\suspicious\invoice.pdf.exe -> C:\Users\Rishi bhatia\clawbot\.deepclean\quarantine\suspicious\invoice.pdf.exe
+[QUARANTINE] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\suspicious\readme.doc.bat -> C:\Users\Rishi bhatia\clawbot\.deepclean\quarantine\suspicious\readme.doc.bat
+[QUARANTINE] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\suspicious\totally_safe.jpg.scr -> C:\Users\Rishi bhatia\clawbot\.deepclean\quarantine\suspicious\totally_safe.jpg.scr
+[RENAME] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\repos\sample-project\package.json -> C:\Users\Rishi bhatia\clawbot\.deepclean-demo\repos\sample-project\2026-02-16_package.json
+[RENAME] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\repos\sample-project\README.md -> C:\Users\Rishi bhatia\clawbot\.deepclean-demo\repos\sample-project\2026-02-16_README.md
+[RENAME] C:\Users\Rishi bhatia\clawbot\.deepclean-demo\repos\sample-project\src\index.ts -> C:\Users\Rishi bhatia\clawbot\.deepclean-demo\repos\sample-project\src\2026-02-16_index.ts
