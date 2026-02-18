@@ -23,6 +23,11 @@ anchored on Sui with data stored on Walrus.
 > It never deletes files — only quarantines (move to quarantine dir).
 > It never exfiltrates secrets or logs credentials.
 
+## Security: Agent Identity
+
+The skill automatically generates a local **Ed25519 keypair** in `.agent-identity`.
+This key is used to **sign** every proof bundle. The signature is anchored on Sui alongside the bundle hash, ensuring that only this specific agent instance could have produced the proof.
+
 ## Slash Commands
 
 ### `/deepclean plan`
@@ -114,8 +119,15 @@ await skill.prove(
     result.runId,
     result.summary,
     result.policyHash,
-    result.bundleSha256
+    result.bundleSha256,
+    result.planHash,
+    result.fileTreeRoot,
+    result.actionCount
 );
+
+// 4. Verify
+const verification = await skill.verify(suiObjectId);
+console.log(`Verified: ${verification.verified}`);
 ```
 
 ## Verification

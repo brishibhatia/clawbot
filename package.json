@@ -16,9 +16,12 @@
   },
   "packageManager": "pnpm@9.15.0",
   "devDependencies": {
+    "@mysten/sui": "^1.45.2",
     "@types/adm-zip": "^0.5.7",
+    "@types/node": "^22.0.0",
     "@types/tar": "^6.1.13",
     "adm-zip": "^0.5.16",
-    "tar": "^7.5.7"
+    "tar": "^7.5.7",
+    "typescript": "^5.7.0"
   }
 }

@@ -56,6 +56,8 @@ export interface ProofManifest {
     policyVersion: string;
     policyHash: string;
     planHash: string;
+    fileTreeRoot: string;
+    actionCount: number;
     environment: {
         os: string;
         nodeVersion: string;

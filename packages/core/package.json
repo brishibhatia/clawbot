@@ -10,6 +10,7 @@
         "test": "node --import tsx --test tests/*.test.ts"
     },
     "dependencies": {
+        "@mysten/sui": "^2.4.0",
         "@types/adm-zip": "^0.5.7",
         "@types/tar": "^6.1.13",
         "adm-zip": "^0.5.16",

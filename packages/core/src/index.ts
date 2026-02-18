@@ -6,3 +6,4 @@ export * from './executor.js';
 export * from './proof-bundle.js';
 export * from './repo-hygiene.js';
 export * from './seal.js';
+export * from './agent-identity.js';

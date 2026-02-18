@@ -12,6 +12,7 @@ describe('buildManifest', () => {
         timestamp: '2025-01-01T00:00:00Z',
         policyVersion: '1.0.0',
         policyHash: 'abc123',
+        planHash: 'test-plan-hash',
         rootPath: '/test',
         dryRun: true,
         actions: [
@@ -51,7 +52,9 @@ describe('buildManifest', () => {
         const manifest = buildManifest(plan, results, '/test', ['file.txt'], ['2025-01-01_file.txt']);
         assert.equal(manifest.runId, 'test-run-001');
         assert.equal(manifest.policyVersion, '1.0.0');
+        assert.equal(manifest.policyVersion, '1.0.0');
         assert.equal(manifest.policyHash, 'abc123');
+        assert.equal(manifest.planHash, 'test-plan-hash');
         assert.equal(manifest.plannedActions.length, 1);
         assert.equal(manifest.executedActions.length, 1);
         assert.deepEqual(manifest.fileTreeBefore, ['file.txt']);
@@ -61,16 +64,16 @@ describe('buildManifest', () => {
         assert.ok(manifest.environment.nodeVersion);
     });
 
-    it('computes correct summary', () => {
+    it('preserves plan summary', () => {
         const manifest = buildManifest(plan, results, '/test', [], []);
-        assert.equal(manifest.summary, '1/1 actions succeeded');
+        assert.equal(manifest.summary, 'Test plan');
     });
 
-    it('handles failed actions in summary', () => {
+    it('handles failed actions in execution count', () => {
         const failedResults: ActionResult[] = [
             { ...results[0], success: false, error: 'Permission denied' },
         ];
         const manifest = buildManifest(plan, failedResults, '/test', [], []);
-        assert.equal(manifest.summary, '0/1 actions succeeded');
+        assert.equal(manifest.actionCount, 0);
     });
 });

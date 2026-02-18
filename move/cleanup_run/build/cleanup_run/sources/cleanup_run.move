@@ -20,6 +20,12 @@ module cleanup_run::cleanup_run {
         summary: String,
         timestamp_ms: u64,       // Unix timestamp in milliseconds (from sui::clock::Clock)
         policy_hash: String,
+        plan_hash: String,
+        file_tree_root: String,
+        action_count: u64,
+        agent_id: String,        // Agent's local public key (hex)
+        signature: vector<u8>,   // Agent's signature of the run data
+        version: u8,
         owner: address,
     }
 
@@ -29,6 +35,11 @@ module cleanup_run::cleanup_run {
         walrus_blob_id: String,
         bundle_sha256: String,
         timestamp_ms: u64,
+        plan_hash: String,
+        file_tree_root: String,
+        action_count: u64,
+        agent_id: String,
+        version: u8,
     }
 
     // ── Entry function — callable from a PTB ────────────────────
@@ -38,12 +49,17 @@ module cleanup_run::cleanup_run {
         bundle_sha256: String,
         summary: String,
         policy_hash: String,
+        plan_hash: String,
+        file_tree_root: String,
+        action_count: u64,
+        agent_id: String,
+        signature: vector<u8>,
         clock: &Clock,
-        ctx: &mut TxContext,
+        ctx: &mut TxContext
     ) {
         let ts = clock::timestamp_ms(clock);
 
-        let record = CleanupRun {
+        let run = CleanupRun {
             id: object::new(ctx),
             run_id,
             walrus_blob_id,
@@ -51,17 +67,27 @@ module cleanup_run::cleanup_run {
             summary,
             timestamp_ms: ts,
             policy_hash,
-            owner: ctx.sender(),
+            plan_hash,
+            file_tree_root,
+            action_count,
+            agent_id,
+            signature,
+            version: 1,
+            owner: tx_context::sender(ctx),
         };
 
         event::emit(CleanupRunRecorded {
-            run_id: record.run_id,
-            walrus_blob_id: record.walrus_blob_id,
-            bundle_sha256: record.bundle_sha256,
-            timestamp_ms: ts,
+            run_id: run.run_id,
+            walrus_blob_id: run.walrus_blob_id,
+            bundle_sha256: run.bundle_sha256,
+            timestamp_ms: run.timestamp_ms,
+            plan_hash: run.plan_hash,
+            file_tree_root: run.file_tree_root,
+            action_count: run.action_count,
+            agent_id: run.agent_id,
+            version: run.version,
         });
-
-        transfer::transfer(record, ctx.sender());
+        transfer::transfer(run, tx_context::sender(ctx));
     }
 
     // ── Read accessors ──────────────────────────────────────────
@@ -71,4 +97,5 @@ module cleanup_run::cleanup_run {
     public fun summary(self: &CleanupRun): &String { &self.summary }
     public fun timestamp_ms(self: &CleanupRun): u64 { self.timestamp_ms }
     public fun policy_hash(self: &CleanupRun): &String { &self.policy_hash }
+    public fun plan_hash(self: &CleanupRun): &String { &self.plan_hash }
 }

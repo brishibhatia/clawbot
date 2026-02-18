@@ -12,7 +12,7 @@ DeepClean Butler watches your configured directories (Downloads, Desktop, projec
 
 1. **Classifies** files: archives, media, code, documents, executables, unknown
 2. **Detects duplicates** by content hash (sha256) — quarantines dupes, keeps newest
-3. **Renames** files with date-prefix + sanitized name for consistency
+3. **Renames** files with date-prefix + sanitized name for consistency (idempotent: skips if already prefixed)
 4. **Quarantines** suspicious items (double extensions like `invoice.pdf.exe`, oversized executables) — **never deletes**
 5. **Auto-unzips** archives to a staging folder
 6. **Generates a proof bundle** for every run: JSON manifest + logs + file tree diffs, zipped and hashed
@@ -233,7 +233,8 @@ clawbot/
 | `SUI_RPC_URL` | No | Auto from network | Custom RPC URL |
 | `SUI_PRIVATE_KEY` | For prove | — | Base64 or `suiprivkey` format (**use burner key!**) |
 | `DEEPCLEAN_PACKAGE_ID` | For prove | — | Published Move package ID |
-| `WALRUS_UPLOAD_RELAY` | No | `https://upload-relay.testnet.walrus.space` | Walrus upload relay |
+| `WALRUS_UPLOAD_RELAY` | No | `https://upload-relay.testnet.walrus.space` | Walrus upload relay (for paid uploads) |
+| `WALRUS_PUBLISHER_URL` | No | `https://publisher.walrus-testnet.walrus.space` | Walrus publisher (for free uploads) |
 | `WALRUS_AGGREGATOR_URL` | No | `https://aggregator.walrus-testnet.walrus.space` | Walrus aggregator |
 
 > ⚠️ **SUI_PRIVATE_KEY**: Use a burner testnet key only. Never use a mainnet key with real funds.
@@ -246,6 +247,34 @@ clawbot/
 - ✅ **DRY_RUN mode**: `plan` command analyzes without executing. Daemon defaults to dry-run.
 - ✅ **No secret exfiltration**: Only file metadata (name, size, hash) is logged. Contents are never read beyond hashing.
 - ✅ **Verifiable**: Every run produces a sha256-hashed proof bundle anchored on-chain.
+
+---
+
+## Advanced Security: "Local God Mode"
+
+DeepClean Butler implements a **Local Agent Identity** model to prevent spoofing and ensure accountability.
+
+1.  **Agent Identity**: Upon first run, the agent generates a local **Ed25519 keypair** stored in `.agent-identity`.
+2.  **Run Signing**: Every proof bundle's SHA-256 hash is **signed** by this agent key.
+3.  **On-Chain Verification**: The `CleanupRun` object on Sui stores the `agent_id` (public key) and the `signature`.
+4.  **Client Verification**: When verifying a run, the client fetches the object from Sui and cryptographically verifies that the stored signature matches the bundle hash and agent ID.
+
+This ensures that even if someone uploads a fake bundle to Walrus, they cannot anchor it on Sui without the agent's private key.
+
+### Verification Command
+
+To verify a run, you only need the **Sui Object ID**. The client downloads the blob from Walrus, re-hashing it, and checking the on-chain signature.
+
+```bash
+node apps/deepclean-cli/dist/index.js verify --object <suiObjectId>
+```
+
+Output:
+```
+   Verified: true
+   Agent ID: TyTX8ADgpuh6JcKm9ySIhuiCrB329MNkw7XCfB2uK0o=
+   Signature: 29,194,... (valid)
+```
 
 ---
 
@@ -304,7 +333,10 @@ Walrus relays can require a tip; the relay advertises its policy at `/v1/tip-con
 curl https://upload-relay.testnet.walrus.space/v1/tip-config
 ```
 
-**DeepClean CLI automatically handles tipping.** If a relay requires a tip, the CLI calculates the auth message, pays the tip on Sui, and attaches the proof to the upload.
+**DeepClean CLI automatically handles tipping and endpoint selection.**
+- Checks `/v1/tip-config` on the configured host.
+- If **404 (Publisher)**: Uploads directly to `/v1/blobs` (Free).
+- If **200 (Relay)**: Calculates auth message, pays tip on Sui, and uploads to `/v1/store` (Paid).
 
 If uploads fail, you can manually check the relay's tip configuration:
 

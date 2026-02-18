@@ -37,6 +37,10 @@ export async function anchorOnSui(params: {
     summary: string;
     policyHash: string;
     planHash: string;
+    fileTreeRoot: string;
+    actionCount: number;
+    agentId: string;
+    signature: number[];
 }): Promise<AnchorResult> {
     const network = (process.env.SUI_NETWORK as 'testnet' | 'mainnet') || 'testnet';
     const rpcUrl = process.env.SUI_RPC_URL || getFullnodeUrl(network);
@@ -58,7 +62,11 @@ export async function anchorOnSui(params: {
             tx.pure.string(params.bundleSha256),
             tx.pure.string(params.summary),
             tx.pure.string(params.policyHash),
-            // tx.pure.string(params.planHash), // Disabled: contract stale, waiting for recompile
+            tx.pure.string(params.planHash),
+            tx.pure.string(params.fileTreeRoot),
+            tx.pure.u64(params.actionCount),
+            tx.pure.string(params.agentId),
+            tx.pure.vector('u8', params.signature),
             tx.object(SUI_CLOCK_OBJECT_ID),
         ],
     });
@@ -93,10 +101,19 @@ export async function fetchCleanupRun(objectId: string): Promise<Record<string, 
     const rpcUrl = process.env.SUI_RPC_URL || getFullnodeUrl(network);
     const client = new SuiClient({ url: rpcUrl });
 
-    const obj = await client.getObject({
-        id: objectId,
-        options: { showContent: true },
-    });
+    let obj: any; // Using any to avoid complex type wrestling in loop
+    for (let i = 0; i < 3; i++) {
+        obj = await client.getObject({
+            id: objectId,
+            options: {
+                showContent: true,
+                showType: true,
+                showOwner: true
+            },
+        });
+        if (obj.data?.content?.dataType === 'moveObject') break;
+        if (i < 2) await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
+    }
 
     if (obj.data?.content?.dataType !== 'moveObject') {
         throw new Error(`Object ${objectId} is not a Move object`);

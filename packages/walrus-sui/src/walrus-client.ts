@@ -9,8 +9,8 @@ import { bcs } from '@mysten/sui/bcs';
 
 const logger = pino({ name: 'deepclean-walrus' });
 
-const DEFAULT_UPLOAD_RELAY = 'https://upload-relay.testnet.walrus.space';
-const DEFAULT_AGGREGATOR = 'https://aggregator.testnet.walrus.space';
+const DEFAULT_UPLOAD_RELAY = 'https://publisher.walrus-testnet.walrus.space';
+const DEFAULT_AGGREGATOR = 'https://aggregator.walrus-testnet.walrus.space';
 
 export interface WalrusUploadResult {
     blobId: string;
@@ -166,16 +166,36 @@ export async function uploadToWalrus(zipPath: string): Promise<WalrusUploadResul
 
     logger.info({ zipPath, relayHost }, 'Uploading proof bundle to Walrus');
 
-    // For paid uploads, we append tx_id and nonce. 
-    // We stick to v1/blobs as it's the standard entry point, relay should handle redirection/auth.
-    const url = `${relayHost}/v1/blobs?encoding_type=RS2${tipParams}`;
+    // Endpoint selection based on host type:
+    // 1. Publisher (free): tip-config returns 404. Use /v1/blobs?epochs=1.
+    // 2. Relay (paid): tip-config returns 200. Use /v1/store?epochs=1 (since blobs 404s there).
+
+    // We determine this by the presence of tipConfig.
+    // (In fetchTipConfig, 404 results in tipRequired=false).
+
+    // However, we also need to know if we are on a RELAY (which supports store) or PUBLISHER (which supports blobs).
+    // The previous logic assumed 404 = Publisher.
+
+    let endpoint = 'v1/blobs'; // Default for publisher
+    if (tipConfig.tipRequired) {
+        // Definitely a relay
+        endpoint = 'v1/store';
+    } else {
+        // If no tip required, it could be Publisher OR Relay-without-tip.
+        // But since we saw Relay return 404 for blobs, we might need to be careful?
+        // For now, assume if 404 on tip-config, it's a Publisher -> blobs.
+        endpoint = 'v1/blobs';
+    }
+
+    const url = `${relayHost}/${endpoint}?epochs=1${tipParams}`;
+    const method = 'PUT';
 
     // Upload with 1 retry on server errors
     let lastError: Error | null = null;
     for (let attempt = 0; attempt < 2; attempt++) {
         try {
             const response = await fetch(url, {
-                method: 'PUT',
+                method,
                 headers: { 'Content-Type': 'application/octet-stream' },
                 body: fileData,
             });

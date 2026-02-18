@@ -1,14 +1,18 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import crypto from 'node:crypto';
+import crypto, { createHash } from 'node:crypto';
 import archiver from 'archiver';
 import { getFileTree } from './planner.js';
-import type { ActionPlan, ActionResult, ProofManifest, DeepCleanConfig } from './types.js';
+import type { ActionPlan, ActionResult, FileInfo, ProofManifest, DeepCleanConfig } from './types.js';
 
 function ensureDir(dir: string): void {
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
     }
+}
+
+function computeListHash(list: string[]): string {
+    return createHash('sha256').update(list.join('|')).digest('hex');
 }
 
 export function buildManifest(
@@ -18,6 +22,10 @@ export function buildManifest(
     fileTreeBefore: string[],
     fileTreeAfter: string[]
 ): ProofManifest {
+    const rootBefore = computeListHash(fileTreeBefore);
+    const rootAfter = computeListHash(fileTreeAfter);
+    const fileTreeRoot = createHash('sha256').update(`${rootBefore}|${rootAfter}`).digest('hex');
+
     return {
         runId: plan.runId,
         startTimestamp: plan.timestamp,
@@ -25,6 +33,8 @@ export function buildManifest(
         policyVersion: plan.policyVersion,
         policyHash: plan.policyHash,
         planHash: plan.planHash,
+        fileTreeRoot,
+        actionCount: results.filter(r => r.success).length,
         environment: {
             os: `${process.platform}-${process.arch}`,
             nodeVersion: process.version,
@@ -37,7 +47,7 @@ export function buildManifest(
         fileTreeBefore,
         fileTreeAfter,
         bundleSha256: '', // filled after zip
-        summary: `${results.filter(r => r.success).length}/${results.length} actions succeeded`,
+        summary: plan.summary,
     };
 }
 

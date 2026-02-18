@@ -122,16 +122,22 @@ export function generatePlan(
             const datePrefix = fileInfo.mtime.toISOString().slice(0, 10);
             const baseName = path.basename(filePath);
             const sanitized = baseName.replace(/[^a-zA-Z0-9._-]/g, '_');
-            const newName = `${datePrefix}_${sanitized}`;
-            if (newName !== baseName) {
-                actions.push({
-                    id: randomUUID(),
-                    type: 'rename',
-                    sourcePath: filePath,
-                    targetPath: path.join(path.dirname(filePath), newName),
-                    reason: `Rename with date prefix: ${newName}`,
-                    fileInfo,
-                });
+
+            // Idempotency: If already prefixed with ANY date (YYYY-MM-DD_), skip
+            if (/^\d{4}-\d{2}-\d{2}_/.test(baseName)) {
+                // Already processed
+            } else {
+                const newName = `${datePrefix}_${sanitized}`;
+                if (newName !== baseName) {
+                    actions.push({
+                        id: randomUUID(),
+                        type: 'rename',
+                        sourcePath: filePath,
+                        targetPath: path.join(path.dirname(filePath), newName),
+                        reason: `Rename with date prefix: ${newName}`,
+                        fileInfo,
+                    });
+                }
             }
         }
     }

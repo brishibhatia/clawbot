@@ -4,6 +4,7 @@ import path from 'node:path';
 import { uploadToWalrus } from '@deepclean/walrus-sui';
 import { anchorOnSui } from '@deepclean/walrus-sui';
 import { loadConfig } from '../config.js';
+import { AgentIdentity } from '@deepclean/core';
 import type { ProofManifest } from '@deepclean/core';
 
 export const proveCommand = new Command('prove')
@@ -13,6 +14,12 @@ export const proveCommand = new Command('prove')
     .action(async (opts) => {
         const config = loadConfig(opts.config);
         const runId = opts.run;
+
+        // Initialize Agent Identity (auto-generates key if missing)
+        // Use current working directory for identity file
+        const identityPath = path.join(process.cwd(), '.agent-identity');
+        const identity = new AgentIdentity(identityPath);
+        console.log(`🆔 Agent Identity: ${identity.agentId}`);
 
         // Find the bundle and manifest
         const bundleName = `deepclean-proof-${runId}`;
@@ -30,6 +37,11 @@ export const proveCommand = new Command('prove')
         console.log('🌊 Uploading proof bundle to Walrus...');
         console.log(`   ZIP:    ${zipPath}`);
         console.log(`   SHA256: ${manifest.bundleSha256}`);
+
+        // Sign the bundle hash
+        console.log('✍️  Signing run...');
+        const message = new TextEncoder().encode(manifest.bundleSha256);
+        const signature = await identity.sign(message);
 
         // Upload to Walrus
         const walrusResult = await uploadToWalrus(zipPath);
@@ -49,6 +61,8 @@ export const proveCommand = new Command('prove')
                 bundleSha256: manifest.bundleSha256,
                 policyHash: manifest.policyHash,
                 summary: manifest.summary,
+                agentId: identity.agentId,
+                signature: Array.from(signature)
             }, null, 2));
             return;
         }
@@ -62,6 +76,10 @@ export const proveCommand = new Command('prove')
             summary: manifest.summary,
             policyHash: manifest.policyHash,
             planHash: manifest.planHash,
+            fileTreeRoot: manifest.fileTreeRoot,
+            actionCount: manifest.actionCount,
+            agentId: identity.agentId,
+            signature: Array.from(signature)
         });
 
         console.log(`\n✅ Anchored on Sui`);

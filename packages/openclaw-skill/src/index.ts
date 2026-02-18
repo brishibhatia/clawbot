@@ -7,7 +7,8 @@ import {
     DeepCleanConfig,
     getFileTree,
     buildManifest,
-    createProofBundle
+    createProofBundle,
+    AgentIdentity
 } from '@deepclean/core';
 import {
     uploadToWalrus,
@@ -26,6 +27,7 @@ export interface DeepCleanSkillConfig {
 export class DeepCleanSkill {
     private config: DeepCleanConfig;
     private policyPath: string;
+    private identity: AgentIdentity;
 
     constructor(config: DeepCleanSkillConfig) {
         const baseDir = path.resolve(config.baseDir);
@@ -40,6 +42,11 @@ export class DeepCleanSkill {
             dryRunByDefault: false,
         };
         this.policyPath = path.join(baseDir, 'policy.json');
+
+        // Initialize Agent Identity (auto-generates key if missing)
+        const identityPath = path.join(baseDir, '.agent-identity');
+        this.identity = new AgentIdentity(identityPath);
+        console.log(`Agent Identity: ${this.identity.agentId}`);
 
         // Ensure dirs exist
         const dirs = [this.config.quarantineDir, this.config.stagingDir, this.config.proofsDir];
@@ -105,6 +112,8 @@ export class DeepCleanSkill {
             bundleSha256: bundle.sha256,
             policyHash: plan.policyHash, // Required for proving
             planHash: plan.planHash,
+            fileTreeRoot: bundle.manifest.fileTreeRoot, // Use manifest.fileTreeRoot
+            actionCount: bundle.manifest.actionCount,
             summary: plan.summary,
             actionsExecuted: results.filter(r => r.success).length,
             failures: results.filter(r => !r.success).length
@@ -114,8 +123,13 @@ export class DeepCleanSkill {
     /**
      * Upload proof bundle to Walrus and anchor on Sui.
      */
-    async prove(bundlePath: string, runId: string, summary: string, policyHash: string, bundleSha256: string) {
+    async prove(bundlePath: string, runId: string, summary: string, policyHash: string, bundleSha256: string, planHash: string, fileTreeRoot: string, actionCount: number) {
         console.log(`Proving run ${runId}...`);
+        console.log(`Agent signing run with key: ${this.identity.agentId}`);
+
+        // Sign the data (bundleSha256)
+        const message = new TextEncoder().encode(bundleSha256);
+        const signature = await this.identity.sign(message);
 
         // 1. Upload to Walrus (with auto-tipping)
         const upload = await uploadToWalrus(bundlePath);
@@ -128,9 +142,12 @@ export class DeepCleanSkill {
             bundleSha256, // Caller provides SHA256 from run() output
             summary,
             policyHash,
-            planHash: '', // details in bundle, contract accepts empty string if needed or we should pass it if we have it
+            planHash,
+            fileTreeRoot,
+            actionCount,
+            agentId: this.identity.agentId,
+            signature: Array.from(signature)
         });
-
         return {
             status: 'proven',
             walrus: {
@@ -151,7 +168,7 @@ export class DeepCleanSkill {
         console.log(`Verifying ${suiObjectId}...`);
         const runRecord = await fetchCleanupRun(suiObjectId);
         const blobId = runRecord.walrus_blob_id;
-        const storedHash = runRecord.bundle_hash;
+        const storedHash = runRecord.bundle_sha256;
 
         const blobBuffer = await downloadFromWalrus(blobId);
 
@@ -163,10 +180,13 @@ export class DeepCleanSkill {
 
         return {
             verified: isMatch,
+            reason: isMatch ? undefined : `SHA256 mismatch: stored=${storedHash}, computed=${computedSha256}`,
             runId: runRecord.run_id,
             timestampMs: runRecord.timestamp_ms,
             storedHash,
-            computedHash: computedSha256
+            computedHash: computedSha256,
+            agentId: runRecord.agent_id,
+            signature: runRecord.signature
         };
     }
 }

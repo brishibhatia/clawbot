@@ -1,0 +1,1 @@
+This is a valid archive created by seed script.
