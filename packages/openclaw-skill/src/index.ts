@@ -60,7 +60,7 @@ export class DeepCleanSkill {
      */
     async plan(targetPath: string) {
         console.log(`Analyzing ${targetPath}...`);
-        const plan = generatePlan(targetPath, this.config, this.policyPath, true); // dryRun=true
+        const plan = await generatePlan(targetPath, this.config, this.policyPath, true); // dryRun=true
         return {
             summary: plan.summary,
             actions: plan.actions.map(a => ({
@@ -86,7 +86,7 @@ export class DeepCleanSkill {
         const fileTreeBefore = getFileTree(targetPath);
 
         // 1. Plan
-        const plan = generatePlan(targetPath, this.config, this.policyPath, false); // dryRun=false
+        const plan = await generatePlan(targetPath, this.config, this.policyPath, false); // dryRun=false
 
         if (plan.actions.length === 0) {
             return { status: 'skipped', message: 'No actions to perform' };

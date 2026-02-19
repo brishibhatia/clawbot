@@ -18,7 +18,7 @@ export const planCommand = new Command('plan')
         console.log(`   Policy: ${opts.policy || 'default'}`);
         console.log('');
 
-        const plan = generatePlan(resolvedRoot, config, opts.policy, true);
+        const plan = await generatePlan(resolvedRoot, config, opts.policy, true);
 
         console.log(`📋 Plan: ${plan.actions.length} actions across ${plan.fileCount} files`);
         console.log(`   Run ID:  ${plan.runId}`);

@@ -12,6 +12,7 @@ if (fs.existsSync(envPath)) {
             process.env[match[1]] = match[2];
         }
     }
+
 }
 
 async function main() {

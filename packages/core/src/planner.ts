@@ -2,9 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { randomUUID } from 'node:crypto';
-import { classifyFile, isSuspicious, shouldSkip } from './classifier.js';
+import { classifyFile, classifyFileWithAI, isSuspicious, shouldSkip } from './classifier.js';
 import { loadPolicy, computePolicyHash, isActionAllowed } from './policy-engine.js';
-import type { ActionPlan, PlannedAction, FileInfo, DeepCleanConfig, ActionType } from './types.js';
+import type { ActionPlan, PlannedAction, ActionItem, FileInfo, DeepCleanConfig, ActionType } from './types.js';
 
 export function computeFileHash(filePath: string): string {
     const content = fs.readFileSync(filePath);
@@ -38,9 +38,17 @@ function collectFiles(dir: string, skipPatterns: string[]): string[] {
     return relPaths.map(p => path.join(cwd, p));
 }
 
-export function buildFileInfo(filePath: string, rootPath: string, maxExeMB: number): FileInfo {
+export async function buildFileInfo(filePath: string, rootPath: string, maxExeMB: number): Promise<FileInfo & { semantic?: { category: string; summary?: string } }> {
     const stat = fs.statSync(filePath);
-    const category = classifyFile(filePath);
+
+    // Use AI classification
+    const aiResult = await classifyFileWithAI(filePath);
+
+    // If AI gave a specific category, prefer it? Or stick to file extension base category?
+    // Let's keep base category for mechanical rules (e.g. unzip archives)
+    // But verify suspicion based on extension still.
+    const baseCategory = classifyFile(filePath);
+
     const suspicion = isSuspicious(filePath, stat.size, maxExeMB);
     const sha256 = computeFileHash(filePath);
 
@@ -50,18 +58,22 @@ export function buildFileInfo(filePath: string, rootPath: string, maxExeMB: numb
         size: stat.size,
         mtime: stat.mtime,
         sha256,
-        category,
+        category: baseCategory,
         suspicious: suspicion.suspicious,
         suspiciousReason: suspicion.reason,
+        semantic: {
+            category: aiResult.category,
+            summary: aiResult.summary
+        }
     };
 }
 
-export function generatePlan(
+export async function generatePlan(
     rootPath: string,
     config: DeepCleanConfig,
     policyPath?: string,
     dryRun: boolean = true
-): ActionPlan {
+): Promise<ActionPlan> {
     const policy = loadPolicy(policyPath);
     const policyHash = computePolicyHash(policy);
     const runId = randomUUID();
@@ -70,19 +82,28 @@ export function generatePlan(
     const seenHashes = new Map<string, string>(); // hash -> first file path
 
     for (const filePath of files) {
-        const fileInfo = buildFileInfo(filePath, rootPath, policy.rules.quarantineLargeExecutablesMB);
+        // Rate limit: Sleep 2s to respect Gemini free tier (approx 15 RPM, but error says 5 RPM?)
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
+        const fileInfo = await buildFileInfo(filePath, rootPath, policy.rules.quarantineLargeExecutablesMB);
+
+        const actionBase: Partial<PlannedAction> = {
+            id: randomUUID(),
+            fileInfo,
+            semanticCategory: fileInfo.semantic?.category,
+            summary: fileInfo.semantic?.summary
+        };
 
         // Suspicious → quarantine
         if (fileInfo.suspicious) {
             if (isActionAllowed('quarantine', config.allowedActions)) {
                 actions.push({
-                    id: randomUUID(),
+                    ...actionBase,
                     type: 'quarantine',
                     sourcePath: filePath,
                     targetPath: path.join(config.quarantineDir, fileInfo.relativePath),
                     reason: fileInfo.suspiciousReason || 'Suspicious file',
-                    fileInfo,
-                });
+                } as PlannedAction);
             }
             continue;
         }
@@ -92,13 +113,12 @@ export function generatePlan(
             const existing = seenHashes.get(fileInfo.sha256);
             if (existing) {
                 actions.push({
-                    id: randomUUID(),
+                    ...actionBase,
                     type: 'dedupe',
                     sourcePath: filePath,
                     targetPath: path.join(config.quarantineDir, 'dupes', fileInfo.relativePath),
                     reason: `Duplicate of ${path.basename(existing)}`,
-                    fileInfo,
-                });
+                } as PlannedAction);
                 continue;
             }
             seenHashes.set(fileInfo.sha256, filePath);
@@ -108,13 +128,12 @@ export function generatePlan(
         if (fileInfo.category === 'archive' && policy.rules.autoUnzipArchives && isActionAllowed('unzip', config.allowedActions)) {
             const baseName = path.basename(filePath, path.extname(filePath));
             actions.push({
-                id: randomUUID(),
+                ...actionBase,
                 type: 'unzip',
                 sourcePath: filePath,
                 targetPath: path.join(config.stagingDir, baseName),
                 reason: 'Archive file — auto-unzip to staging',
-                fileInfo,
-            });
+            } as PlannedAction);
         }
 
         // Rename with date prefix
@@ -130,17 +149,21 @@ export function generatePlan(
                 const newName = `${datePrefix}_${sanitized}`;
                 if (newName !== baseName) {
                     actions.push({
-                        id: randomUUID(),
+                        ...actionBase,
                         type: 'rename',
                         sourcePath: filePath,
                         targetPath: path.join(path.dirname(filePath), newName),
                         reason: `Rename with date prefix: ${newName}`,
-                        fileInfo,
-                    });
+                    } as PlannedAction);
                 }
             }
         }
     }
+
+    // Classify action for pure Semantic logging if no other action taken?
+    // For now, only semantic info attached to other actions.
+    // Ideally we should have a 'classify' action if we just want to log what it is.
+    // But let's stick to existing actions + metadata for now.
 
     const summary = `Plan: ${actions.length} actions across ${files.length} files in ${rootPath}`;
 

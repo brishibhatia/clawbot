@@ -1,6 +1,6 @@
 # Verifiable DeepClean Butler
 
-> An always-on local agent that proactively cleans and organizes your workspace, producing tamper-evident proof bundles anchored on **Sui** with data stored on **Walrus**.
+> An AI-powered local agent that proactively cleans and organizes your workspace, producing tamper-evident proof bundles anchored on **Sui** with data stored on **Walrus**. Now with **Gemini AI** for semantic file classification.
 
 **Track 2 — "Local God Mode"** | Mission: OpenClaw (Sui × OpenClaw)
 
@@ -10,12 +10,12 @@
 
 DeepClean Butler watches your configured directories (Downloads, Desktop, project folders) and:
 
-1. **Classifies** files: archives, media, code, documents, executables, unknown
+1. **Classifies** files: archives, media, code, documents, executables, unknown — with optional **Gemini AI** for semantic analysis (Invoice, Contract, Personal, Work, Code)
 2. **Detects duplicates** by content hash (sha256) — quarantines dupes, keeps newest
 3. **Renames** files with date-prefix + sanitized name for consistency (idempotent: skips if already prefixed)
 4. **Quarantines** suspicious items (double extensions like `invoice.pdf.exe`, oversized executables) — **never deletes**
 5. **Auto-unzips** archives to a staging folder
-6. **Generates a proof bundle** for every run: JSON manifest + logs + file tree diffs, zipped and hashed
+6. **Generates a proof bundle** for every run: JSON manifest + logs + file tree diffs + AI summaries, zipped and hashed
 7. **Uploads the bundle to Walrus** (decentralized storage)
 8. **Anchors a `CleanupRun` object on Sui** binding the Walrus blob ID + sha256 + metadata
 
@@ -108,10 +108,10 @@ node apps/deepclean-daemon/dist/index.js
 │                    @deepclean/core                          │
 │  ┌──────────┐ ┌────────┐ ┌──────────┐ ┌──────────────────┐ │
 │  │Classifier│ │Planner │ │Executor  │ │Proof Bundle      │ │
-│  │          │ │        │ │(non-dest)│ │Builder           │ │
+│  │+ Gemini  │ │        │ │(non-dest)│ │Builder           │ │
 │  └──────────┘ └────────┘ └──────────┘ └──────────────────┘ │
 │  ┌──────────────────┐ ┌──────────────┐ ┌────────────────┐  │
-│  │Policy Engine     │ │Repo Hygiene  │ │Seal (stub)     │  │
+│  │Policy Engine     │ │Semantic AI   │ │Agent Identity  │  │
 │  └──────────────────┘ └──────────────┘ └────────────────┘  │
 ├─────────────────────────────────────────────────────────────┤
 │                 @deepclean/walrus-sui                       │
@@ -159,11 +159,13 @@ clawbot/
 │   │   ├── src/
 │   │   │   ├── index.ts                #   Barrel exports
 │   │   │   ├── types.ts                #   Shared types & interfaces
-│   │   │   ├── classifier.ts           #   File classification by extension
+│   │   │   ├── classifier.ts           #   File classification (extension + AI)
+│   │   │   ├── semantic-classifier.ts  #   Gemini AI semantic analysis
 │   │   │   ├── policy-engine.ts        #   Rule evaluation from policy.json
-│   │   │   ├── planner.ts              #   Directory scan → ActionPlan
+│   │   │   ├── planner.ts              #   Directory scan → ActionPlan (rate-limited)
 │   │   │   ├── executor.ts             #   Non-destructive action execution
 │   │   │   ├── proof-bundle.ts         #   Manifest + ZIP + SHA-256
+│   │   │   ├── agent-identity.ts       #   Ed25519 agent keypair management
 │   │   │   ├── repo-hygiene.ts         #   Git repo detection & checks
 │   │   │   └── seal.ts                 #   Seal encryption stub (AES-256-GCM)
 │   │   ├── tests/
@@ -185,6 +187,9 @@ clawbot/
 │   │   └── tsconfig.json
 │   │
 │   └── openclaw-skill/                 # OpenClaw integration
+│       ├── src/
+│       │   ├── index.ts               #   DeepCleanSkill API wrapper
+│       │   └── demo.ts                #   End-to-end integration test
 │       ├── SKILL.md                    #   Skill metadata (YAML frontmatter)
 │       └── deepclean.md                #   /deepclean slash command workflow
 │
@@ -236,8 +241,11 @@ clawbot/
 | `WALRUS_UPLOAD_RELAY` | No | `https://upload-relay.testnet.walrus.space` | Walrus upload relay (for paid uploads) |
 | `WALRUS_PUBLISHER_URL` | No | `https://publisher.walrus-testnet.walrus.space` | Walrus publisher (for free uploads) |
 | `WALRUS_AGGREGATOR_URL` | No | `https://aggregator.walrus-testnet.walrus.space` | Walrus aggregator |
+| `GEMINI_API_KEY` | No | — | Google Gemini API key for semantic AI classification (free tier works) |
 
 > ⚠️ **SUI_PRIVATE_KEY**: Use a burner testnet key only. Never use a mainnet key with real funds.
+>
+> 💡 **GEMINI_API_KEY**: Optional. If set, files are classified using AI. Free tier allows ~5 requests/min; the system auto-retries on rate limits.
 
 ---
 
@@ -353,6 +361,50 @@ The `prove` command handles this automatically (including tip payment if configu
 walrus_blob_id=...
 sui_object_id=...
 tx_digest=...
+```
+
+---
+
+## Semantic AI Classification (Gemini) 🧠
+
+DeepClean Butler optionally uses **Google Gemini** to analyze file contents and provide intelligent classification beyond file extensions.
+
+### How It Works
+
+1. **Smart Classification**: Reads the first 2KB of text-based files and sends to Gemini for analysis.
+2. **Categories**: Returns one of `Invoice`, `Contract`, `Personal`, `Work`, `Code`, or `Unknown`.
+3. **Auto-Summary**: Generates a 1-sentence summary stored in the proof bundle's `actions.jsonl`.
+4. **Graceful Fallback**: If `GEMINI_API_KEY` is not set or the API fails, falls back to extension-based classification.
+5. **Rate Limiting**: Built-in retry logic with exponential backoff (5s → 10s → 20s) to handle free-tier API quotas.
+
+### Enable It
+
+Add your API key to `.env`:
+```bash
+GEMINI_API_KEY=AIzaSy...
+```
+
+The classifier will automatically engage for text files (`.txt`, `.md`, `.json`, `.yaml`, `.py`, `.js`, `.ts`, etc.).
+
+---
+
+## OpenClaw Skill Integration
+
+The `@deepclean/openclaw-skill` package provides a programmatic API for integration with the OpenClaw ecosystem:
+
+```typescript
+import { DeepCleanSkill } from '@deepclean/openclaw-skill';
+
+const skill = new DeepCleanSkill();
+const plan = await skill.plan('.deepclean-demo');
+const result = await skill.run('.deepclean-demo');
+await skill.prove(result);
+const verified = await skill.verify(suiObjectId);
+```
+
+Run the integration test:
+```bash
+node packages/openclaw-skill/dist/demo.js
 ```
 
 ---

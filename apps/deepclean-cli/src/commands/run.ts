@@ -24,7 +24,7 @@ export const runCommand = new Command('run')
         const fileTreeBefore = getFileTree(resolvedRoot);
 
         // Generate plan
-        const plan = generatePlan(resolvedRoot, config, opts.policy, dryRun);
+        const plan = await generatePlan(resolvedRoot, config, opts.policy, dryRun);
         console.log(`📋 Plan: ${plan.actions.length} actions across ${plan.fileCount} files`);
         console.log(`   Run ID: ${plan.runId}`);
 

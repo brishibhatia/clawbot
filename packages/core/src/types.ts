@@ -15,12 +15,17 @@ export interface FileInfo {
 
 export type ActionType = 'classify' | 'unzip' | 'dedupe' | 'rename' | 'quarantine' | 'skip' | 'report';
 
-export interface PlannedAction {
-    id: string;
+export interface ActionItem {
     type: ActionType;
     sourcePath: string;
-    targetPath?: string;
+    targetPath?: string; // For move/rename/unzip
     reason: string;
+    semanticCategory?: string; // AI-determined category
+    summary?: string;          // AI-generated summary
+}
+
+export interface PlannedAction extends ActionItem {
+    id: string;
     fileInfo: FileInfo;
 }
 
