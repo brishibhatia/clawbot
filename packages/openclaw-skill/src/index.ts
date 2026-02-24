@@ -146,7 +146,10 @@ export class DeepCleanSkill {
             fileTreeRoot,
             actionCount,
             agentId: this.identity.agentId,
-            signature: Array.from(signature)
+            signature: Array.from(signature),
+            walrusCertifyTx: upload.walrusCertifyTx,
+            walrusAvailabilityEventRef: upload.walrusAvailabilityEventRef,
+            walrusConfirmationCertSha256: upload.walrusConfirmationCertSha256,
         });
         return {
             status: 'proven',
@@ -157,6 +160,11 @@ export class DeepCleanSkill {
             sui: {
                 txDigest: anchor.txDigest,
                 objectId: anchor.objectId
+            },
+            poa: {
+                walrusCertifyTx: upload.walrusCertifyTx || 'pending',
+                walrusAvailabilityEventRef: upload.walrusAvailabilityEventRef || '',
+                walrusConfirmationCertSha256: upload.walrusConfirmationCertSha256 || '',
             }
         };
     }

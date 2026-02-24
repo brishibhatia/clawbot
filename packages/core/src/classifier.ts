@@ -39,9 +39,10 @@ let semanticClassifier: SemanticClassifier | null = null;
 
 function getSemanticClassifier(): SemanticClassifier | null {
     if (semanticClassifier) return semanticClassifier;
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (apiKey) {
-        semanticClassifier = new SemanticClassifier(apiKey);
+    const openAiKey = process.env.OPENAI_API_KEY;
+    const geminiKey = process.env.GEMINI_API_KEY;
+    if (openAiKey || geminiKey) {
+        semanticClassifier = new SemanticClassifier(openAiKey, geminiKey);
         return semanticClassifier;
     }
     return null;

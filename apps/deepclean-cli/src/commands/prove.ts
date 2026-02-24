@@ -2,6 +2,7 @@ import { Command } from 'commander';
 import fs from 'node:fs';
 import path from 'node:path';
 import { uploadToWalrus } from '@deepclean/walrus-sui';
+import type { WalrusMode } from '@deepclean/walrus-sui';
 import { anchorOnSui } from '@deepclean/walrus-sui';
 import { loadConfig } from '../config.js';
 import { AgentIdentity } from '@deepclean/core';
@@ -11,6 +12,7 @@ export const proveCommand = new Command('prove')
     .description('Upload proof bundle to Walrus and anchor on Sui')
     .requiredOption('--run <runId>', 'Run ID to prove')
     .option('--config <path>', 'Path to deepclean.config.json')
+    .option('--walrus-mode <mode>', 'Walrus upload mode: auto, relay, or publisher (default: auto)', 'auto')
     .action(async (opts) => {
         const config = loadConfig(opts.config);
         const runId = opts.run;
@@ -44,10 +46,20 @@ export const proveCommand = new Command('prove')
         const signature = await identity.sign(message);
 
         // Upload to Walrus
-        const walrusResult = await uploadToWalrus(zipPath);
+        const walrusMode = (opts.walrusMode || 'auto') as WalrusMode;
+        if (walrusMode !== 'auto') {
+            console.log(`   Mode:   ${walrusMode} (forced)`);
+        }
+        const walrusResult = await uploadToWalrus(zipPath, walrusMode);
         console.log(`\n✅ Uploaded to Walrus`);
         console.log(`   Blob ID: ${walrusResult.blobId}`);
         console.log(`   URL:     ${walrusResult.blobUrl}`);
+        if (walrusResult.walrusCertifyTx) {
+            console.log(`   PoA Certify TX: ${walrusResult.walrusCertifyTx}`);
+        }
+        if (walrusResult.walrusConfirmationCertSha256) {
+            console.log(`   Cert SHA256: ${walrusResult.walrusConfirmationCertSha256}`);
+        }
 
         // Anchor on Sui
         const packageId = process.env.DEEPCLEAN_PACKAGE_ID;
@@ -79,7 +91,10 @@ export const proveCommand = new Command('prove')
             fileTreeRoot: manifest.fileTreeRoot,
             actionCount: manifest.actionCount,
             agentId: identity.agentId,
-            signature: Array.from(signature)
+            signature: Array.from(signature),
+            walrusCertifyTx: walrusResult.walrusCertifyTx,
+            walrusAvailabilityEventRef: walrusResult.walrusAvailabilityEventRef,
+            walrusConfirmationCertSha256: walrusResult.walrusConfirmationCertSha256,
         });
 
         console.log(`\n✅ Anchored on Sui`);
@@ -92,7 +107,10 @@ export const proveCommand = new Command('prove')
         console.log(`\n─── Copy-Paste IDs ─────────────────────────`);
         console.log(`walrus_blob_id=${walrusResult.blobId}`);
         console.log(`sui_object_id=${suiResult.objectId}`);
-        console.log(`tx_digest=${suiResult.txDigest}`);
+        console.log(`cleanup_run_tx=${suiResult.txDigest}`);
+        if (walrusResult.walrusCertifyTx) {
+            console.log(`walrus_certify_tx=${walrusResult.walrusCertifyTx}`);
+        }
         console.log(`─────────────────────────────────────────────`);
 
         console.log(`\nVerify: node apps/deepclean-cli/dist/index.js verify --object ${suiResult.objectId}`);

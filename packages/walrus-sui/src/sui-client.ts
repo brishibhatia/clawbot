@@ -41,6 +41,9 @@ export async function anchorOnSui(params: {
     actionCount: number;
     agentId: string;
     signature: number[];
+    walrusCertifyTx: string;
+    walrusAvailabilityEventRef: string;
+    walrusConfirmationCertSha256: string;
 }): Promise<AnchorResult> {
     const network = (process.env.SUI_NETWORK as 'testnet' | 'mainnet') || 'testnet';
     const rpcUrl = process.env.SUI_RPC_URL || getFullnodeUrl(network);
@@ -67,6 +70,9 @@ export async function anchorOnSui(params: {
             tx.pure.u64(params.actionCount),
             tx.pure.string(params.agentId),
             tx.pure.vector('u8', params.signature),
+            tx.pure.string(params.walrusCertifyTx),
+            tx.pure.string(params.walrusAvailabilityEventRef),
+            tx.pure.string(params.walrusConfirmationCertSha256),
             tx.object(SUI_CLOCK_OBJECT_ID),
         ],
     });

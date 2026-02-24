@@ -6,6 +6,7 @@ import { Transaction } from '@mysten/sui/transactions';
 import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
 import { fromBase64 } from '@mysten/sui/utils';
 import { bcs } from '@mysten/sui/bcs';
+import { PoaCache } from './poa-cache.js';
 
 const logger = pino({ name: 'deepclean-walrus' });
 
@@ -15,7 +16,15 @@ const DEFAULT_AGGREGATOR = 'https://aggregator.walrus-testnet.walrus.space';
 export interface WalrusUploadResult {
     blobId: string;
     blobUrl: string;
+    /** Sui tx digest for Walrus certify step (from alreadyCertified.event.txDigest or certifyOnSui) */
+    walrusCertifyTx: string;
+    /** "txDigest:eventSeq" when available (publisher alreadyCertified path) */
+    walrusAvailabilityEventRef: string;
+    /** sha256(confirmation_certificate bytes) — relay path only, empty for publisher */
+    walrusConfirmationCertSha256: string;
 }
+
+export type WalrusMode = 'auto' | 'relay' | 'publisher';
 
 interface TipConfig {
     tipRequired: boolean;
@@ -142,8 +151,9 @@ async function payRelayTip(blob: Buffer, tipAddress: string, tipAmount: number):
  * Upload a proof bundle zip to Walrus via the upload relay.
  * Pre-checks /v1/tip-config to determine if a tip is required.
  * Retries once on 5xx errors.
+ * @param mode - 'auto' (default): detect via tip-config. 'relay': force relay path. 'publisher': force publisher path.
  */
-export async function uploadToWalrus(zipPath: string): Promise<WalrusUploadResult> {
+export async function uploadToWalrus(zipPath: string, mode: WalrusMode = 'auto'): Promise<WalrusUploadResult> {
     const relayHost = process.env.WALRUS_UPLOAD_RELAY || DEFAULT_UPLOAD_RELAY;
     const aggregatorUrl = process.env.WALRUS_AGGREGATOR_URL || DEFAULT_AGGREGATOR;
 
@@ -177,18 +187,24 @@ export async function uploadToWalrus(zipPath: string): Promise<WalrusUploadResul
     // The previous logic assumed 404 = Publisher.
 
     let endpoint = 'v1/blobs'; // Default for publisher
-    if (tipConfig.tipRequired) {
-        // Definitely a relay
-        endpoint = 'v1/store';
-    } else {
-        // If no tip required, it could be Publisher OR Relay-without-tip.
-        // But since we saw Relay return 404 for blobs, we might need to be careful?
-        // For now, assume if 404 on tip-config, it's a Publisher -> blobs.
-        endpoint = 'v1/blobs';
+    let isRelay = tipConfig.tipRequired;
+
+    // Mode override
+    if (mode === 'relay') {
+        isRelay = true;
+        logger.info('Forced relay mode via --walrus-mode relay');
+    } else if (mode === 'publisher') {
+        isRelay = false;
+        logger.info('Forced publisher mode via --walrus-mode publisher');
+    }
+
+    if (isRelay) {
+        // Upload relay endpoint per Walrus docs
+        endpoint = 'v1/blob-upload-relay';
     }
 
     const url = `${relayHost}/${endpoint}?epochs=1${tipParams}`;
-    const method = 'PUT';
+    const method = isRelay ? 'POST' : 'PUT';
 
     // Upload with 1 retry on server errors
     let lastError: Error | null = null;
@@ -202,16 +218,65 @@ export async function uploadToWalrus(zipPath: string): Promise<WalrusUploadResul
 
             if (response.ok) {
                 const json = await response.json() as Record<string, any>;
-                const blobId =
-                    json.newlyCreated?.blobObject?.blobId ??
-                    json.alreadyCertified?.blobId ??
-                    'unknown';
 
-                logger.info({ blobId }, 'Successfully uploaded to Walrus');
+                // ── Parse PoA data from response ──
+                let blobId = 'unknown';
+                let walrusCertifyTx = '';
+                let walrusAvailabilityEventRef = '';
+                let walrusConfirmationCertSha256 = '';
+
+                if (json.alreadyCertified) {
+                    // Publisher path: blob was previously certified
+                    blobId = json.alreadyCertified.blobId ?? 'unknown';
+                    const evt = json.alreadyCertified.event;
+                    if (evt?.txDigest) {
+                        walrusCertifyTx = evt.txDigest;
+                        walrusAvailabilityEventRef = `${evt.txDigest}:${evt.eventSeq ?? 0}`;
+                    }
+                } else if (json.newlyCreated) {
+                    // Publisher path: freshly registered (certifiedEpoch may be null)
+                    blobId = json.newlyCreated.blobObject?.blobId ?? 'unknown';
+                    // No certify tx available yet for fresh uploads
+                }
+
+                // Relay path: check for confirmation_certificate
+                if (isRelay && json.confirmation_certificate) {
+                    blobId = json.blob_id ?? blobId;
+                    const certBytes = typeof json.confirmation_certificate === 'string'
+                        ? Buffer.from(json.confirmation_certificate, 'base64')
+                        : Buffer.from(JSON.stringify(json.confirmation_certificate));
+                    walrusConfirmationCertSha256 = createHash('sha256').update(certBytes).digest('hex');
+                    // certifyOnSui() will be called by the prove command
+                    // walrusCertifyTx will be set there
+                }
+
+                logger.info({ blobId, walrusCertifyTx, isRelay }, 'Successfully uploaded to Walrus');
+
+                // Cache PoA data for future lookups
+                const cache = new PoaCache();
+                if (walrusCertifyTx || walrusConfirmationCertSha256) {
+                    cache.set(blobId, {
+                        certifyTxDigest: walrusCertifyTx,
+                        availabilityEventRef: walrusAvailabilityEventRef,
+                        confirmationCertSha256: walrusConfirmationCertSha256,
+                    });
+                } else {
+                    // Check if we have cached PoA from a previous upload of this blob
+                    const cached = cache.get(blobId);
+                    if (cached) {
+                        walrusCertifyTx = cached.certifyTxDigest;
+                        walrusAvailabilityEventRef = cached.availabilityEventRef;
+                        walrusConfirmationCertSha256 = cached.confirmationCertSha256;
+                        logger.info({ blobId }, 'Restored PoA data from local cache');
+                    }
+                }
 
                 return {
                     blobId,
                     blobUrl: `${aggregatorUrl}/v1/blobs/${blobId}`,
+                    walrusCertifyTx,
+                    walrusAvailabilityEventRef,
+                    walrusConfirmationCertSha256,
                 };
             }
 

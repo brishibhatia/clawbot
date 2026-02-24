@@ -121,4 +121,7 @@ export interface CleanupRunRecord {
     policyHash: string;
     suiObjectId?: string;
     txDigest?: string;
+    walrusCertifyTx?: string;
+    walrusAvailabilityEventRef?: string;
+    walrusConfirmationCertSha256?: string;
 }
