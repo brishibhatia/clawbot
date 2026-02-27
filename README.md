@@ -8,18 +8,20 @@
 
 ## What It Does
 
-DeepClean Butler watches your configured directories (Downloads, Desktop, project folders) and:
+DeepClean Butler is a local AI agent that keeps messy folders clean **and produces cryptographic proof** of what it did.
 
-1. **Classifies** files: archives, media, code, documents, executables, unknown — with optional **Gemini AI** for semantic analysis (Invoice, Contract, Personal, Work, Code)
-2. **Detects duplicates** by content hash (sha256) — quarantines dupes, keeps newest
-3. **Renames** files with date-prefix + sanitized name for consistency (idempotent: skips if already prefixed)
-4. **Quarantines** suspicious items (double extensions like `invoice.pdf.exe`, oversized executables) — **never deletes**
-5. **Auto-unzips** archives to a staging folder
-6. **Generates a proof bundle** for every run: JSON manifest + logs + file tree diffs + AI summaries, zipped and hashed
-7. **Uploads the bundle to Walrus** (decentralized storage)
-8. **Anchors a `CleanupRun` object on Sui** binding the Walrus blob ID + sha256 + metadata
+It watches configured directories (Downloads, Desktop, project folders) and:
 
-Anyone can **verify** a run by downloading the blob from Walrus and checking the hash against the on-chain record.
+1. **Automated cleanup**: scans and organizes files by classifying, renaming, deduplicating, and quarantining.
+2. **Duplicate detection**: detects duplicates by content hash (SHA-256), quarantines duplicates, keeps the newest.
+3. **Consistent naming**: renames files with a date-prefix + sanitized name (idempotent: skips if already prefixed).
+4. **Suspicious-file quarantine**: quarantines risky patterns (double extensions like `invoice.pdf.exe`, oversized executables) — **never deletes**.
+5. **Archive handling**: auto-unzips archives to a staging folder for safe inspection.
+6. **Tamper-evident proof bundle**: generates a proof bundle per run (manifest, logs, file-tree diffs, AI summaries), zips it, and computes SHA-256.
+7. **Walrus storage**: uploads the bundle to Walrus (decentralized blob storage).
+8. **Sui anchoring**: anchors a `CleanupRun` object on Sui binding `walrus_blob_id` + `bundle_sha256` + metadata.
+
+Anyone can verify a run by downloading the blob from a Walrus aggregator (`GET $AGGREGATOR/v1/blobs/<blobId>`) and checking the SHA-256 hash matches the on-chain `CleanupRun`.
 
 ---
 
@@ -31,6 +33,31 @@ Anyone can **verify** a run by downloading the blob from Walrus and checking the
 | "What if someone tampers with the proof bundle after the fact?" | Download from Walrus + recompute hash + compare with Sui record |
 | "Where do I store large proof artifacts durably?" | Walrus — decentralized blob storage with high availability; Walrus supports verifiable Proof of Availability (PoA) certificates anchored on Sui |
 | "Can I audit the cleanup policy that was applied?" | Policy hash is stored on-chain alongside the run record |
+
+---
+
+## Key Uses & Use Cases
+
+### Key Uses
+
+1. **Automated workspace cleanup** — Scans messy directories and automatically classifies, renames, deduplicates, and quarantines files; non-destructive (no permanent deletes) with restore from quarantine.
+2. **AI-powered file classification** — Optionally uses OpenAI (preferred) or Gemini to semantically classify text-based files (Invoice, Contract, Personal, Work, Code), going beyond extension-only rules.
+3. **Tamper-evident proof of work** — Every run produces a SHA-256 hashed proof bundle that captures what actions happened and why, creating an auditable trail.
+4. **On-chain anchoring (Sui + Walrus)** — The proof bundle is stored on Walrus while the immutable reference (bundle SHA-256, policy hash, metadata, timestamp) is anchored on Sui, enabling public verification.
+5. **Public verification (no secrets)** — Any third party can verify a run with only a Sui Object ID: fetch the `CleanupRun` via `sui_getObject`, download the Walrus blob via `GET /v1/blobs/<blobId>`, recompute SHA-256, and compare. If `walrus_certify_tx` exists, PoA checking fetches tx details via `sui_getTransactionBlock` and verifies it succeeded.
+6. **OpenClaw skill integration** — Exposes a programmatic API and a `/deepclean` skill workflow so other agents/tools can trigger runs.
+7. **Always-on daemon mode** — Runs continuously in the background using directory watchers and scheduled runs.
+
+### Real-World Use Cases
+
+| Who | Use Case |
+|-----|----------|
+| **Developers** | Keep downloads and project folders clean, prevent accidental execution of suspicious files, maintain consistent naming |
+| **Teams / Compliance** | Produce auditable cleanup evidence to show how sensitive files were handled (without deleting them) |
+| **AI agent operators** | Prove an autonomous local agent actually performed the claimed actions, with cryptographic evidence |
+| **Hackathon judges** | One-click verification that the system works end-to-end (Sui anchor + Walrus bundle download + hash match) |
+
+> **Core value proposition:** an AI agent that cleans your files **and proves it did so honestly** with cryptographic evidence anchored on a public blockchain.
 
 ---
 
@@ -110,6 +137,7 @@ node apps/deepclean-cli/dist/index.js prove --run RUN_ID_HERE --walrus-mode rela
 node apps/deepclean-cli/dist/index.js prove --run RUN_ID_HERE --walrus-mode publisher
 
 # Verify (public, no secrets) — downloads via GET $AGGREGATOR/v1/blobs/BLOB_ID
+# Also available via the web verifier at /verify/SUI_OBJECT_ID_HERE
 node apps/deepclean-cli/dist/index.js verify --object SUI_OBJECT_ID_HERE
 
 # Verify with full PoA details (certify tx, event ref, cert hash)
