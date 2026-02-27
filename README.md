@@ -1,8 +1,12 @@
 # Verifiable DeepClean Butler
 
-> An AI-powered local agent that proactively cleans and organizes your workspace, producing tamper-evident proof bundles anchored on **Sui** with data stored on **Walrus**. Now with **Gemini AI** for semantic file classification.
+> An AI-powered local agent that proactively cleans and organizes your workspace, producing tamper-evident proof bundles anchored on **Sui** with data stored on **Walrus**. Supports **OpenAI** and **Gemini** for semantic file classification.
 
 **Track 2 — "Local God Mode"** | Mission: OpenClaw (Sui × OpenClaw)
+
+### Why This Wins Track 2
+
+Always-on local agent · non-destructive safety (quarantine, never delete) · cryptographic proof bundle anchored on Sui · decentralized artifact storage on Walrus · public third-party verification with no secrets · OpenClaw-native skill with supervised plan/run/prove/verify workflow.
 
 ---
 
@@ -58,6 +62,21 @@ Anyone can verify a run by downloading the blob from a Walrus aggregator (`GET $
 | **Hackathon judges** | One-click verification that the system works end-to-end (Sui anchor + Walrus bundle download + hash match) |
 
 > **Core value proposition:** an AI agent that cleans your files **and proves it did so honestly** with cryptographic evidence anchored on a public blockchain.
+
+---
+
+## Demo in 60 Seconds
+
+| Step | Command | What you should see |
+|------|---------|--------------------|
+| **1. Build** | `pnpm build` | `BUILD OK` (0 errors) |
+| **2. Seed** | `node scripts/seed_workspace.mjs` | `✅ Demo workspace seeded — 34 items created` |
+| **3. Plan** | `node apps/deepclean-cli/dist/index.js plan --path .deepclean-demo` | `27 actions across 25 files` (dry-run, nothing modified) |
+| **4. Run** | `node apps/deepclean-cli/dist/index.js run --path .deepclean-demo` | Proof bundle created with SHA-256 hash + Run ID printed |
+| **5. Prove** | `node apps/deepclean-cli/dist/index.js prove --run RUN_ID_HERE` | Walrus blob ID + Sui Object ID + TX digest printed |
+| **6. Verify** | `node apps/deepclean-cli/dist/index.js verify --object SUI_OBJECT_ID_HERE --show-poa` | `Hash Match: ✅ YES`, `Availability (Walrus): ✅ YES` |
+
+> 🔑 **No secrets needed to verify.** Step 6 uses only public reads: `sui_getObject` for the on-chain record and `GET $AGGREGATOR/v1/blobs/<blobId>` for the Walrus blob download. Any third party can reproduce it.
 
 ---
 
@@ -136,7 +155,8 @@ node apps/deepclean-cli/dist/index.js prove --run RUN_ID_HERE --walrus-mode rela
 # Force publisher mode (free, but PoA may be pending initially)
 node apps/deepclean-cli/dist/index.js prove --run RUN_ID_HERE --walrus-mode publisher
 
-# Verify (public, no secrets) — downloads via GET $AGGREGATOR/v1/blobs/BLOB_ID
+# Verify (public, no secrets) — downloads via GET $AGGREGATOR/v1/blobs/<blobId>
+# No secrets needed: uses only sui_getObject + Walrus aggregator download
 # Also available via the web verifier at /verify/SUI_OBJECT_ID_HERE
 node apps/deepclean-cli/dist/index.js verify --object SUI_OBJECT_ID_HERE
 
@@ -487,16 +507,29 @@ The classifier will automatically engage for text files (`.txt`, `.md`, `.json`,
 
 ## OpenClaw Skill Integration
 
-The `@deepclean/openclaw-skill` package provides a programmatic API for integration with the OpenClaw ecosystem:
+The `@deepclean/openclaw-skill` package provides a programmatic API for integration with the OpenClaw ecosystem.
+
+### What Makes It OpenClaw-Native
+
+The `/deepclean` skill exposes the full agent lifecycle as a supervised workflow:
+
+| Skill Action | What it does | Supervised? |
+|-------------|--------------|-------------|
+| `skill.plan(path)` | Scans directory, produces an action plan | ✅ Review before executing |
+| `skill.run(path)` | Executes cleanup, generates proof bundle | ✅ Plan must be approved first |
+| `skill.prove(result)` | Uploads to Walrus + anchors on Sui | ✅ Requires explicit trigger |
+| `skill.verify(objectId)` | Public verification (no secrets) | ✅ Anyone can run |
+
+In supervised mode, each step requires explicit approval before proceeding — the agent proposes, the human confirms.
 
 ```typescript
 import { DeepCleanSkill } from '@deepclean/openclaw-skill';
 
 const skill = new DeepCleanSkill();
-const plan = await skill.plan('.deepclean-demo');
-const result = await skill.run('.deepclean-demo');
-await skill.prove(result);
-const verified = await skill.verify(suiObjectId);
+const plan = await skill.plan('.deepclean-demo');   // review the plan
+const result = await skill.run('.deepclean-demo');  // execute after approval
+await skill.prove(result);                          // anchor on-chain
+const verified = await skill.verify(suiObjectId);   // public verification
 ```
 
 Run the integration test:
