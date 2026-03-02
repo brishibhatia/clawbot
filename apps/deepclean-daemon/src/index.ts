@@ -36,7 +36,7 @@ async function performCleanup(config: DeepCleanConfig) {
         logger.info({ root: resolvedRoot }, 'Running cleanup');
 
         const fileTreeBefore = getFileTree(resolvedRoot);
-        const plan = generatePlan(resolvedRoot, config, undefined, config.dryRunByDefault);
+        const plan = await generatePlan(resolvedRoot, config, undefined, config.dryRunByDefault);
         const results = await executePlan(plan);
         const fileTreeAfter = getFileTree(resolvedRoot);
 

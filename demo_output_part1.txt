@@ -1,0 +1,108 @@
+﻿=== DeepClean Butler — Full CLI Demo ===
+Date: 2026-02-27 21:44:12
+
+--- Step 1: Build ---
+
+BUILD OK
+
+--- Step 2: Seed Demo Workspace ---
+≡ƒî▒ Seeding demo workspace...
+
+≡ƒº╣ Cleaning previous demo workspace...
+  ≡ƒôä documents/meeting notes.docx
+  ≡ƒôä documents/quarterly-report.pdf
+  ≡ƒôä documents/budget_2025.xlsx
+  ≡ƒôä documents/readme.md
+  ≡ƒôä media/vacation_photo.jpg
+  ≡ƒôä media/presentation_recording.mp4
+  ≡ƒôä media/podcast_episode.mp3
+  ≡ƒôä code/app.ts
+  ≡ƒôä code/utils.py
+  ≡ƒôä code/config.json
+  ≡ƒôª archives/backup-2024.tar.gz
+  ≡ƒôª archives/old-project.zip
+  ≡ƒôä documents/important_doc.txt
+  ≡ƒôä documents/important_doc_copy.txt
+  ≡ƒôä documents/important_doc_backup.txt
+  ≡ƒôä suspicious/invoice.pdf.exe
+  ≡ƒôä suspicious/readme.doc.bat
+  ≡ƒôä suspicious/totally_safe.jpg.scr
+  ≡ƒôä downloads/random_installer.exe
+  ≡ƒôä downloads/unnamed_file
+  ≡ƒôä downloads/file (1).txt
+  ≡ƒôä downloads/file (2).txt
+  ≡ƒôä repos/sample-project/package.json
+  ≡ƒôä repos/sample-project/src/index.ts
+  ≡ƒôä repos/sample-project/README.md
+
+Γ£à Demo workspace seeded at ./.deepclean-demo
+   34 items created
+
+
+--- Step 3: Plan (Dry Run) ---
+≡ƒöì DeepClean ΓÇö Generating cleanup plan...
+   Root:   C:\Users\Rishi bhatia\clawbot\.deepclean-demo
+   Policy: default
+
+≡ƒôï Plan: 27 actions across 25 files
+   Run ID:  dd6cb605-0c1e-44e1-a35a-5a7abd63f635
+   Policy:  v1.0.0 (f06421f3cec5ΓÇª)
+
+  ≡ƒôª [UNZIP] archives\backup-2024.tar.gz
+     ΓåÆ Archive file ΓÇö auto-unzip to staging
+  ≡ƒô¥ [RENAME] archives\backup-2024.tar.gz
+     ΓåÆ Rename with date prefix: 2026-02-27_backup-2024.tar.gz
+  ≡ƒôª [UNZIP] archives\old-project.zip
+     ΓåÆ Archive file ΓÇö auto-unzip to staging
+  ≡ƒô¥ [RENAME] archives\old-project.zip
+     ΓåÆ Rename with date prefix: 2026-02-27_old-project.zip
+  ≡ƒô¥ [RENAME] code\app.ts
+     ΓåÆ Rename with date prefix: 2026-02-27_app.ts
+  ≡ƒô¥ [RENAME] code\config.json
+     ΓåÆ Rename with date prefix: 2026-02-27_config.json
+  ≡ƒô¥ [RENAME] code\utils.py
+     ΓåÆ Rename with date prefix: 2026-02-27_utils.py
+  ≡ƒô¥ [RENAME] documents\budget_2025.xlsx
+     ΓåÆ Rename with date prefix: 2026-02-27_budget_2025.xlsx
+  ≡ƒô¥ [RENAME] documents\important_doc.txt
+     ΓåÆ Rename with date prefix: 2026-02-27_important_doc.txt
+  ≡ƒöù [DEDUPE] documents\important_doc_backup.txt
+     ΓåÆ Duplicate of important_doc.txt
+  ≡ƒöù [DEDUPE] documents\important_doc_copy.txt
+     ΓåÆ Duplicate of important_doc.txt
+  ≡ƒô¥ [RENAME] documents\meeting notes.docx
+     ΓåÆ Rename with date prefix: 2026-02-27_meeting_notes.docx
+  ≡ƒô¥ [RENAME] documents\quarterly-report.pdf
+     ΓåÆ Rename with date prefix: 2026-02-27_quarterly-report.pdf
+  ≡ƒô¥ [RENAME] documents\readme.md
+     ΓåÆ Rename with date prefix: 2026-02-27_readme.md
+  ≡ƒô¥ [RENAME] downloads\file (1).txt
+     ΓåÆ Rename with date prefix: 2026-02-27_file__1_.txt
+  ≡ƒô¥ [RENAME] downloads\file (2).txt
+     ΓåÆ Rename with date prefix: 2026-02-27_file__2_.txt
+  ≡ƒô¥ [RENAME] downloads\random_installer.exe
+     ΓåÆ Rename with date prefix: 2026-02-27_random_installer.exe
+  ≡ƒô¥ [RENAME] downloads\unnamed_file
+     ΓåÆ Rename with date prefix: 2026-02-27_unnamed_file
+  ≡ƒô¥ [RENAME] media\podcast_episode.mp3
+     ΓåÆ Rename with date prefix: 2026-02-27_podcast_episode.mp3
+  ≡ƒô¥ [RENAME] media\presentation_recording.mp4
+     ΓåÆ Rename with date prefix: 2026-02-27_presentation_recording.mp4
+  ≡ƒô¥ [RENAME] media\vacation_photo.jpg
+     ΓåÆ Rename with date prefix: 2026-02-27_vacation_photo.jpg
+  ≡ƒöÆ [QUARANTINE] suspicious\invoice.pdf.exe
+     ΓåÆ Double extension detected: invoice.pdf.exe
+  ≡ƒöÆ [QUARANTINE] suspicious\readme.doc.bat
+     ΓåÆ Double extension detected: readme.doc.bat
+  ≡ƒöÆ [QUARANTINE] suspicious\totally_safe.jpg.scr
+     ΓåÆ Double extension detected: totally_safe.jpg.scr
+  ≡ƒô¥ [RENAME] repos\sample-project\package.json
+     ΓåÆ Rename with date prefix: 2026-02-27_package.json
+  ≡ƒô¥ [RENAME] repos\sample-project\README.md
+     ΓåÆ Rename with date prefix: 2026-02-27_README.md
+  ≡ƒô¥ [RENAME] repos\sample-project\src\index.ts
+     ΓåÆ Rename with date prefix: 2026-02-27_index.ts
+
+Γä╣∩╕Å  This is a DRY RUN. No files were modified.
+   Run `deepclean-cli run --path <dir>` to execute.
+

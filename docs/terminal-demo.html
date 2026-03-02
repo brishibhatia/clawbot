@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DeepClean Butler — CLI Demo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0d1117;
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    color: #c9d1d9;
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 0;
+  }
+  .window {
+    max-width: 900px;
+    margin: 20px auto;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #30363d;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  }
+  .titlebar {
+    background: #161b22;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #30363d;
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.red { background: #ff5f57; }
+  .dot.yellow { background: #febc2e; }
+  .dot.green { background: #28c840; }
+  .titlebar-text {
+    color: #8b949e;
+    font-size: 12px;
+    margin-left: 12px;
+  }
+  .terminal {
+    padding: 16px 20px;
+    min-height: 500px;
+    background: #0d1117;
+  }
+  .block { margin-bottom: 12px; opacity: 0; transform: translateY(4px); }
+  .block.visible { opacity: 1; transform: translateY(0); transition: opacity 0.3s, transform 0.3s; }
+  .prompt { color: #58a6ff; }
+  .prompt::before { content: '❯ '; color: #7ee787; }
+  .cmd { color: #f0f6fc; font-weight: 700; }
+  .output { color: #8b949e; margin-top: 2px; white-space: pre-wrap; }
+  .success { color: #3fb950; }
+  .info { color: #58a6ff; }
+  .warn { color: #d29922; }
+  .hash { color: #bc8cff; }
+  .dim { color: #484f58; }
+  .header {
+    color: #58a6ff;
+    font-weight: 700;
+    font-size: 14px;
+    border-bottom: 1px solid #21262d;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+  }
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 15px;
+    background: #58a6ff;
+    animation: blink 1s step-end infinite;
+    vertical-align: text-bottom;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+</style>
+</head>
+<body>
+<div class="window">
+  <div class="titlebar">
+    <div class="dot red"></div>
+    <div class="dot yellow"></div>
+    <div class="dot green"></div>
+    <span class="titlebar-text">PowerShell — c:\Users\Rishi bhatia\clawbot</span>
+  </div>
+  <div class="terminal" id="term">
+    <div class="block" data-delay="500">
+      <div class="header">🧹 DeepClean Butler — Full CLI Demo</div>
+    </div>
+
+    <div class="block" data-delay="1500">
+      <div class="prompt"><span class="cmd">npx tsc -b packages/core packages/walrus-sui apps/deepclean-cli</span></div>
+      <div class="output"><span class="success">✅ BUILD OK</span> — 0 errors, 4 packages compiled</div>
+    </div>
+
+    <div class="block" data-delay="3500">
+      <div class="prompt"><span class="cmd">node scripts/seed_workspace.mjs</span></div>
+      <div class="output">🌱 Seeding demo workspace...
+  📄 documents/meeting notes.docx
+  📄 documents/quarterly-report.pdf
+  📄 code/app.ts  ·  code/utils.py  ·  code/config.json
+  📦 archives/backup-2024.tar.gz  ·  archives/old-project.zip
+  📄 suspicious/invoice.pdf.exe  ·  suspicious/readme.doc.bat
+  📄 downloads/random_installer.exe  ·  downloads/file (1).txt
+
+<span class="success">✅ Demo workspace seeded at ./.deepclean-demo — 34 items created</span></div>
+    </div>
+
+    <div class="block" data-delay="6000">
+      <div class="prompt"><span class="cmd">node apps/deepclean-cli/dist/index.js plan --path .deepclean-demo</span></div>
+      <div class="output">🔍 DeepClean — Generating cleanup plan...
+   Root:   C:\Users\Rishi bhatia\clawbot\.deepclean-demo
+   Policy: default
+
+  📦 [UNZIP]      archives\backup-2024.tar.gz
+  📝 [RENAME]     code\app.ts → 2026-02-27_app.ts
+  🔗 [DEDUPE]     documents\important_doc_backup.txt → duplicate
+  🔒 [QUARANTINE] suspicious\invoice.pdf.exe → double extension
+  🔒 [QUARANTINE] suspicious\readme.doc.bat → double extension
+  📝 [RENAME]     media\vacation_photo.jpg → 2026-02-27_vacation_photo.jpg
+  <span class="dim">... (27 total actions)</span>
+
+<span class="success">📋 Plan: 27 actions across 25 files</span>
+<span class="info">ℹ️  This is a DRY RUN. No files were modified.</span></div>
+    </div>
+
+    <div class="block" data-delay="9000">
+      <div class="prompt"><span class="cmd">node apps/deepclean-cli/dist/index.js run --path .deepclean-demo</span></div>
+      <div class="output">🧹 DeepClean — Executing cleanup...
+   Renamed 19 files · Deduped 2 files · Quarantined 3 suspicious items
+
+<span class="success">📦 Proof bundle created:</span>
+   ZIP:    .deepclean-proofs\deepclean-proof-ebe3af16-a115-4fbe-83e4-b6764ba83333.zip
+   SHA256: <span class="hash">d5e53c5bed17848c215087b30fb02451018654b37773bc270e20fbc53df3e4e0</span>
+   Run ID: <span class="info">ebe3af16-a115-4fbe-83e4-b6764ba83333</span></div>
+    </div>
+
+    <div class="block" data-delay="12000">
+      <div class="prompt"><span class="cmd">node apps/deepclean-cli/dist/index.js prove --run ebe3af16-a115-4fbe-83e4-b6764ba83333</span></div>
+      <div class="output">🆔 Agent Identity: TyTX8ADgpuh6JcKm9ySIhuiCrB329MNkw7XCfB2uK0o=
+🌊 Uploading proof bundle to Walrus...
+✍️  Signing run...
+
+<span class="success">✅ Uploaded to Walrus</span>
+   Blob ID: <span class="hash">dnDFF1-HkQMhN8tJGQ-lpNkaoPpJmu1x6xTTVc6CANQ</span>
+
+⛓️  Anchoring CleanupRun on Sui...
+
+<span class="success">✅ Anchored on Sui</span>
+   TX Digest:  <span class="info">FCoLGtQk52rhPa3W4dwivT2K97SszBnQdXsa8f7h1hGb</span>
+   Object ID:  <span class="info">0xb3a87df3fe2b7705f7286ae5328bb57045e75cade9266b47f0b5914245b33fca</span>
+   Explorer:   https://suiscan.xyz/testnet/object/0xb3a87df3...</div>
+    </div>
+
+    <div class="block" data-delay="15500">
+      <div class="prompt"><span class="cmd">node apps/deepclean-cli/dist/index.js verify --object 0xb3a87df3...b33fca --show-poa</span></div>
+      <div class="output">🔍 Verifying CleanupRun...
+   Fetched on-chain record
+   Downloading from Walrus...
+   Downloaded blob (9,542 bytes)
+   Computed hash of downloaded blob
+
+── Verification Result ──────────────────────
+   Run ID:          ebe3af16-a115-4fbe-83e4-b6764ba83333
+   Walrus Blob ID:  dnDFF1-HkQMhN8tJGQ-lpNkaoPpJmu1x6xTTVc6CANQ
+   Expected SHA256: <span class="hash">d5e53c5bed17848c215087b30fb02451018654b37773bc270e20fbc53df3e4e0</span>
+   Actual SHA256:   <span class="hash">d5e53c5bed17848c215087b30fb02451018654b37773bc270e20fbc53df3e4e0</span>
+   Hash Match:      <span class="success">✅ YES</span>
+
+   <span class="success">✅ Bundle hash matches on-chain record. Proof is valid.</span>
+
+── Availability & PoA ──────────────────────
+   Availability (Walrus):  <span class="success">✅ YES</span>
+   PoA (on-chain):         <span class="warn">⏳ PENDING</span>  (publisher mode — use --wait-poa or relay mode)
+
+<span class="dim">🔑 No secrets were needed. Anyone can reproduce this verification.</span></div>
+    </div>
+
+    <div class="block" data-delay="19000">
+      <div class="output"><span class="cursor"></span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const blocks = document.querySelectorAll('.block');
+  blocks.forEach(b => {
+    const delay = parseInt(b.dataset.delay) || 0;
+    setTimeout(() => b.classList.add('visible'), delay);
+  });
+</script>
+</body>
+</html>
